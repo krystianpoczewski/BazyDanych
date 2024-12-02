@@ -10,9 +10,11 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 @Repository
 public interface RoomRepository extends JpaRepository<Room, Integer> {
+
     List<Room> findAll();
 
     Optional<Room> findById(Integer id);
@@ -31,4 +33,7 @@ public interface RoomRepository extends JpaRepository<Room, Integer> {
                                            @Param("maxPrice") BigDecimal maxPrice,
                                            @Param("startDate") Date startDate,
                                            @Param("endDate") Date endDate);
+
+
+    
 }
