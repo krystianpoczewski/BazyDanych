@@ -1,3 +1,5 @@
+package com.example.hotel.dto;
+
 //package com.example.hotel.dto;
 //
 //import com.example.hotel.model.User;
@@ -9,7 +11,7 @@
 //import javax.validation.constraints.Size;
 //
 //@Data
-//public class UserDTO {
+public class UserDTO {
 //
 //
 //    private String firstName;
@@ -17,5 +19,5 @@
 //    private String email;
 //    private String password;
 //    private  com. example. hotel. model.Role role;  // USER, ADMIN
-//}
+}
 
