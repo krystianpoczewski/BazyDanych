@@ -32,10 +32,9 @@ public class User {
     @Column(name = "email")
     private String email;
 
-    @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
-    private Role role;
+    private UserRole role;
 
     private String hashPassword(String plainPassword) {
         return BCrypt.hashpw(plainPassword, BCrypt.gensalt(12));
@@ -43,7 +42,7 @@ public class User {
 
     public User() {}
 
-    public User(Role role, String email, String password, String lastName, String firstName) {
+    public User(UserRole role, String email, String password, String lastName, String firstName) {
         this.role = role;
         this.email = email;
         setPassword(password);
@@ -91,11 +90,11 @@ public class User {
         this.email = email;
     }
 
-    public Role getRole() {
+    public UserRole getRole() {
         return role;
     }
 
-    public void setRole(Role role) {
+    public void setRole(UserRole role) {
         this.role = role;
     }
 
@@ -111,7 +110,3 @@ public class User {
     }
 }
 
-enum Role{
-    USER,
-    ADMIN
-}
