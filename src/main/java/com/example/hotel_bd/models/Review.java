@@ -8,6 +8,20 @@ import jakarta.validation.constraints.Size;
 
 import java.util.Date;
 
+/**
+ * Represents a review entity with attributes for a user, date, content, and rating.
+ * The review is associated with a specific user and includes textual content
+ * and a rating score.
+ *
+ * This entity is annotated to be used with JPA for ORM (Object-Relational Mapping)
+ * and includes constraints for ensuring data validity:
+ * - The user associated with the review cannot be null.
+ * - The content of the review should be between 1 and 255 characters.
+ * - The rating must be an integer between 1 and 5.
+ *
+ * The Review class provides getter and setter methods to access and modify
+ * its attributes, and a custom toString implementation for easy representation.
+ */
 @Entity
 public class Review {
     @Id

@@ -7,6 +7,17 @@ import jakarta.validation.constraints.Size;
 
 import java.math.BigDecimal;
 
+/**
+ * The ReservationAmenities class represents the amenities associated with a reservation.
+ * Each amenity has a unique identifier, a name, and a price per night.
+ *
+ * This class is annotated with JPA annotations to map it to a database entity.
+ *
+ * Attributes include:
+ * - id: A unique identifier for the amenity.
+ * - name: The name of the amenity, which must be unique and non-null.
+ * - pricePerNight: The price per night for the amenity, which must be non-null and non-negative.
+ */
 @Entity
 public class ReservationAmenities {
     @Id

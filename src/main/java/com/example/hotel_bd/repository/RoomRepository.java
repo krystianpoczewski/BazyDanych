@@ -10,8 +10,20 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * RoomRepository is an interface that extends JpaRepository for Room entities. It provides
+ * methods to perform operations on Room data, including finding all rooms, finding a room by its ID,
+ * and finding available rooms based on certain filtering criteria.
+ */
 public interface RoomRepository extends JpaRepository<Room, Integer> {
     List<Room> findAll();
+
+    /**
+     * Retrieves a room by its unique identifier.
+     *
+     * @param id the unique identifier of the room to be retrieved
+     * @return an Optional containing the found Room if it exists, or an empty Optional if not found
+     */
     Optional<Room> findById(int id);
     @Query("SELECT r FROM Room r WHERE " +
             "(:roomType IS NULL OR r.type.id = :roomType) AND " +

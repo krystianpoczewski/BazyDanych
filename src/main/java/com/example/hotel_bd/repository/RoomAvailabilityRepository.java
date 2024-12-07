@@ -9,6 +9,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * RoomAvailabilityRepository is an interface for managing the persistence and retrieval
+ * of RoomAvailability entities. It extends JpaRepository to inherit standard CRUD operations.
+ */
 public interface RoomAvailabilityRepository extends JpaRepository<RoomAvailability, Integer> {
     List<RoomAvailability> findAll();
     @Query("SELECT ra FROM RoomAvailability ra WHERE ra.room.id = :roomId " +

@@ -8,6 +8,19 @@ import java.math.BigDecimal;
 import java.util.List;
 
 
+/**
+ * Represents a Room entity with an identifier, type, capacity, price per night, and associated amenities.
+ *
+ * The Room can have a defined room type, a specified number of people it can accommodate,
+ * a nightly rate, and a collection of amenities that enhance the room's offerings.
+ *
+ * Attributes:
+ * - id: A unique identifier for the Room, automatically generated.
+ * - type: The type of Room, as defined by the RoomType entity.
+ * - capacity: An integer representing the maximum number of occupants the Room can accommodate.
+ * - pricePerNight: The cost of renting the Room for one night.
+ * - amenities: A list of available amenities in the Room.
+ */
 @Entity
 public class Room {
     @Id

@@ -4,6 +4,19 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
+/**
+ * The RoomAmenities class represents the amenities that can be associated with a room
+ * in a hotel management system. Each amenity has a unique identifier and a name.
+ * This class is annotated as an entity to be used with Java Persistence API (JPA) for database operations.
+ *
+ * Fields:
+ * - id: A unique identifier for the RoomAmenities entity, which is automatically generated.
+ * - name: The name of the amenity, which must be a non-null string with a length between 1 and 50 characters.
+ *
+ * Key Behaviors:
+ * - Provides getter and setter methods for the id and name properties.
+ * - Overrides the toString method to return a string representation of the RoomAmenities object.
+ */
 @Entity
 public class RoomAmenities {
     @Id

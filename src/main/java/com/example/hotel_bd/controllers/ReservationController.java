@@ -31,6 +31,17 @@ public class ReservationController {
     @Autowired
     RoomAvailabilityRepository roomAvailabilityRepository;
 
+    /**
+     * Creates a new reservation for a user based on the provided reservation details.
+     * This method checks if the reservation dates are valid and if the selected rooms are available.
+     * If the reservation is successfully created, it will store the reservation and update room availability.
+     *
+     * @param reservationDTO the data transfer object containing reservation details including amenities, check-in
+     *                       and check-out dates, and rooms to be reserved
+     * @return a ResponseEntity containing a confirmation message if the reservation is successfully created, or
+     *         an error message if the reservation dates are invalid, if rooms are not available, or if the user
+     *         is not found
+     */
     @PostMapping("/")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<String> createReservation(@RequestBody ReservationDTO reservationDTO) {
@@ -74,6 +85,12 @@ public class ReservationController {
             return ResponseEntity.badRequest().body("User not found.");
         }
     }
+    /**
+     * Retrieves all reservations associated with the authenticated user.
+     *
+     * @return ResponseEntity containing a list of reservations if the user is found,
+     *         otherwise a ResponseEntity with a bad request status.
+     */
     @GetMapping("/")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<List<Reservation>> getAllUserReservations() {
@@ -85,6 +102,15 @@ public class ReservationController {
         }
             return ResponseEntity.badRequest().body(null);
     }
+    /**
+     * Updates an existing reservation in the system. This method validates the reservation details,
+     * ensures that the rooms in the reservation are available for the specified dates, and updates the reservation
+     * in the database if the validation passes. The user must have 'ADMIN' role to perform this operation.
+     *
+     * @param id the ID of the reservation to be updated
+     * @param reservationDTO a DTO containing the updated details of the reservation including check-in and check-out dates, rooms, and amenities
+     * @return a ResponseEntity containing a success message if the reservation is updated, or an error message if the update fails
+     */
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> updateReservation(@PathVariable Integer id, @RequestBody ReservationDTO reservationDTO) {
@@ -123,6 +149,13 @@ public class ReservationController {
             return ResponseEntity.badRequest().body("Reservation not found.");
     }
 
+    /**
+     * Deletes a reservation with the specified ID along with associated room availabilities.
+     *
+     * @param id the unique identifier of the reservation to be deleted
+     * @return a ResponseEntity containing a success message if the reservation was successfully
+     *         deleted, or an error message if the reservation was not found
+     */
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> deleteReservation(@PathVariable Integer id) {
@@ -140,6 +173,12 @@ public class ReservationController {
         return ResponseEntity.badRequest().body("Reservation not found.");
     }
 
+    /**
+     * Retrieves all reservations from the database.
+     * This method is accessible only to users with the 'ADMIN' role.
+     *
+     * @return a ResponseEntity containing a list of all reservations
+     */
     @GetMapping("/all")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<Reservation>> getAllReservations() {
@@ -147,6 +186,15 @@ public class ReservationController {
         return ResponseEntity.ok(reservations);
     }
 
+    /**
+     * Checks if the reservation dates are within a valid range.
+     *
+     * The method calculates the duration, in days, between the check-in and check-out dates
+     * specified in the ReservationDTO. It validates whether this duration is less than 1 day or greater than 30 days.
+     *
+     * @param reservationDTO the data transfer object containing the check-in and check-out dates
+     * @return true if the duration is less than 1 day or greater than 30 days, false otherwise
+     */
     private boolean isValidDate(@RequestBody ReservationDTO reservationDTO) {
         long durationInMillis = reservationDTO.getCheckOutDate().getTime() - reservationDTO.getCheckInDate().getTime();
         long durationInDays = durationInMillis / (1000 * 60 * 60 * 24);

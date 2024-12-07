@@ -13,6 +13,11 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * Represents a user entity for the application, leveraging Spring Security's UserDetails
+ * to incorporate security-related user data.
+ * This class is annotated with JPA annotations to map it to a relational database table.
+ */
 @Entity
 public class User implements UserDetails {
 

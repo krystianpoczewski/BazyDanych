@@ -10,6 +10,16 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Represents a reservation made by a user, including details about the check-in
+ * and check-out dates, rooms, and optional amenities associated with the reservation.
+ *
+ * The Reservation class is annotated as an entity, meaning it is mapped to a database table.
+ * It uses several Java persistence annotations to define relationships and constraints.
+ *
+ * The class provides methods to calculate the price of the reservation, manage associated
+ * rooms and amenities, and access or modify various reservation details.
+ */
 @Entity
 public class Reservation {
     @Id

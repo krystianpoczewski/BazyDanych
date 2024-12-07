@@ -10,6 +10,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Rest Controller for managing RoomType entities.
+ * Provides CRUD operations for RoomTypes in the system.
+ */
 @RestController
 @RequestMapping("/room/type")
 public class RoomTypeController {
@@ -17,6 +21,14 @@ public class RoomTypeController {
     @Autowired
     private RoomTypeRepository roomTypeRepository;
 
+    /**
+     * Adds a new RoomType to the repository if it does not already exist.
+     * This method is restricted to users with the 'ADMIN' role.
+     *
+     * @param requestRoomType the RoomType object containing the details to be added
+     * @return a ResponseEntity containing the newly added RoomType, or a bad request response if the
+     *         RoomType already exists
+     */
     @PostMapping("/")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<RoomType> addRoomType(@RequestBody RoomType requestRoomType) {
@@ -28,6 +40,14 @@ public class RoomTypeController {
         return ResponseEntity.ok(requestRoomType);
     }
 
+    /**
+     * Updates an existing RoomType entity with new details provided in the request.
+     * This method is restricted to users with the 'ADMIN' role.
+     *
+     * @param requestRoomType the RoomType object containing updated information
+     * @return a ResponseEntity containing the updated RoomType if successful, or a not found response
+     *         if the RoomType does not exist
+     */
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<RoomType> updateRoomType(@RequestBody RoomType requestRoomType) {
@@ -41,6 +61,14 @@ public class RoomTypeController {
         return ResponseEntity.notFound().build();
     }
 
+    /**
+     * Deletes a RoomType entity identified by the provided ID.
+     * This method is restricted to users with the 'ADMIN' role.
+     *
+     * @param id the ID of the RoomType to be deleted
+     * @return a ResponseEntity with a success message if the RoomType is found and deleted,
+     *         or a not found response if the RoomType does not exist
+     */
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> deleteRoomType(@PathVariable Integer id) {
@@ -52,12 +80,23 @@ public class RoomTypeController {
         return ResponseEntity.notFound().build();
     }
 
+    /**
+     * Retrieves a list of all available RoomType entities from the repository.
+     *
+     * @return a ResponseEntity containing a list of RoomType instances
+     */
     @GetMapping("/")
     public ResponseEntity<List<RoomType>> getAllRoomTypes() {
         List<RoomType> roomTypes = roomTypeRepository.findAll();
         return ResponseEntity.ok(roomTypes);
     }
 
+    /**
+     * Retrieves a RoomType entity based on the provided ID.
+     *
+     * @param id the ID of the RoomType to retrieve
+     * @return a ResponseEntity containing the RoomType if found, or a not found response if the RoomType does not exist
+     */
     @GetMapping("/{id}")
     public ResponseEntity<RoomType> getRoomTypeById(@PathVariable Integer id) {
         Optional<RoomType> roomTypeOpt = roomTypeRepository.findById(id);

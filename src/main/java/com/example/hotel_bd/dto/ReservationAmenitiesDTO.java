@@ -7,6 +7,14 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 
+/**
+ * The ReservationAmenitiesDTO class is a data transfer object used for transferring
+ * reservation amenity data. It primarily includes the name of the amenity and the
+ * price per night associated with it.
+ *
+ * The name property is validated to ensure it is not null and has a length between 1 and 50 characters.
+ * The pricePerNight property is validated to ensure it is not null and is a non-negative value.
+ */
 @Data
 public class ReservationAmenitiesDTO {
     @NotNull

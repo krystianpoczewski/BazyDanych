@@ -4,6 +4,18 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import java.util.Date;
 
+/**
+ * Represents the availability of a room within a certain date range.
+ * This entity is used to track room bookings by associating a specific room
+ * with a check-in and check-out date.
+ *
+ * The RoomAvailability entity includes information about the room,
+ * check-in date, and check-out date. Functionalities include setting and getting
+ * these values, as well as generating a string representation of the object.
+ *
+ * Each RoomAvailability instance corresponds to a single availability period
+ * for a specific room.
+ */
 @Entity
 public class RoomAvailability {
     @Id

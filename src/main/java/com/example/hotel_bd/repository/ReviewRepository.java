@@ -7,6 +7,10 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Repository interface for handling CRUD operations and custom queries related to the Review entity.
+ * Extends the JpaRepository to provide JPA functionality.
+ */
 public interface ReviewRepository extends JpaRepository<Review, Integer> {
     List<Review> findAll();
     Optional<Review> findById(int id);

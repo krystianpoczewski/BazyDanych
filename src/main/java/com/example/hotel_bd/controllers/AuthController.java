@@ -11,6 +11,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * AuthController is a REST controller that manages authentication processes.
+ * It handles user login requests and generates JWT tokens for authenticated users.
+ */
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
