@@ -2,6 +2,7 @@ package com.example.hotel_bd.controllers;
 
 import com.example.hotel_bd.dto.AuthRequest;
 import com.example.hotel_bd.dto.AuthResponse;
+import com.example.hotel_bd.dto.ChangePasswordRequest;
 import com.example.hotel_bd.dto.UserDTO;
 import com.example.hotel_bd.models.User;
 import com.example.hotel_bd.models.UserRole;
@@ -22,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
  * It handles user login requests and generates JWT tokens for authenticated users.
  */
 @RestController
-@RequestMapping("/auth")
+@RequestMapping
 public class AuthController {
 
     private final AuthenticationManager authenticationManager;
@@ -36,7 +37,7 @@ public class AuthController {
         this.passwordEncoder = passwordEncoder;
     }
 
-    @PostMapping("/login")
+    @PostMapping("/auth/login")
     public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest request) {
         try {
             Authentication authentication = authenticationManager.authenticate(
@@ -49,7 +50,7 @@ public class AuthController {
         }
     }
 
-    @PostMapping("/register")
+    @PostMapping("/auth/register")
     public ResponseEntity<String> register(@RequestBody UserDTO request) {
         var existing = userRepository.findByEmail(request.getEmail());
         if(existing.isPresent()){
@@ -63,5 +64,21 @@ public class AuthController {
         user.setRole(request.getRole() != null ? request.getRole() : UserRole.USER);
         userRepository.save(user);
         return ResponseEntity.ok("User registered successfully");
+    }
+
+    @PostMapping("/user/change-password")
+    public ResponseEntity<String> changePassword(@RequestBody ChangePasswordRequest request, Authentication authentication) {
+        String email = authentication.getName();
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (!passwordEncoder.matches(request.getOldPassword(), user.getHashedPassword())) {
+            throw new IllegalArgumentException("Old password is incorrect");
+        }
+
+        user.setHashedPassword(passwordEncoder.encode(request.getNewPassword()));
+        userRepository.save(user);
+
+        return ResponseEntity.ok("Password updated successfully");
     }
 }

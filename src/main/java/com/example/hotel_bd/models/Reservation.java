@@ -61,12 +61,13 @@ public class Reservation {
         BigDecimal totalPrice = BigDecimal.ZERO;
 
         for (Room room : rooms) {
-            totalPrice = totalPrice.add(room.getPricePerNight());
+            BigDecimal roomPrice = room.getPricePerNight() != null ? room.getPricePerNight() : BigDecimal.ZERO;
+            totalPrice = totalPrice.add(roomPrice);
         }
-
         if (amenities != null && !amenities.isEmpty()) {
             for (ReservationAmenities amenity : amenities) {
-                totalPrice = totalPrice.add(amenity.getPricePerNight());
+                BigDecimal amenityPrice = amenity.getPricePerNight() != null ? amenity.getPricePerNight() : BigDecimal.ZERO;
+                totalPrice = totalPrice.add(amenityPrice);
             }
         }
 
@@ -79,6 +80,7 @@ public class Reservation {
 
         return totalPrice.divide(BigDecimal.valueOf(totalDays), 2, RoundingMode.HALF_UP);
     }
+
 
     public Reservation() {}
 

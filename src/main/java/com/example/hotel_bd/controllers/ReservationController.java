@@ -1,13 +1,9 @@
 package com.example.hotel_bd.controllers;
 
 import com.example.hotel_bd.dto.ReservationDTO;
-import com.example.hotel_bd.models.Reservation;
-import com.example.hotel_bd.models.Room;
-import com.example.hotel_bd.models.RoomAvailability;
-import com.example.hotel_bd.models.User;
-import com.example.hotel_bd.repository.ReservationRepository;
-import com.example.hotel_bd.repository.RoomAvailabilityRepository;
-import com.example.hotel_bd.repository.UserRepository;
+import com.example.hotel_bd.models.*;
+import com.example.hotel_bd.repository.*;
+import com.example.hotel_bd.service.EmailService;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,6 +33,14 @@ public class ReservationController {
     @Autowired
     RoomAvailabilityRepository roomAvailabilityRepository;
 
+    @Autowired
+    EmailService emailService;
+
+    @Autowired
+    RoomRepository roomRepository;
+    @Autowired
+    private ReservationAmenitiesRepository reservationAmenitiesRepository;
+
     /**
      * Creates a new reservation for a user based on the provided reservation details.
      * This method checks if the reservation dates are valid and if the selected rooms are available.
@@ -54,7 +58,14 @@ public class ReservationController {
         if (isValidDate(reservationDTO))
             return ResponseEntity.badRequest().body("Reservation duration must be between 1 and 30 days.");
 
-        List<Room> rooms = reservationDTO.getRooms();
+        List<Room> rooms = new ArrayList<Room>();
+        for(Room r : reservationDTO.getRooms()){
+            roomRepository.findById(r.getId()).ifPresent(rooms::add);
+        }
+        List<ReservationAmenities> amenities = new ArrayList<ReservationAmenities>();
+        for(ReservationAmenities r : reservationDTO.getAmenities()){
+            reservationAmenitiesRepository.findById(r.getId()).ifPresent(amenities::add);
+        }
         for (Room room : rooms) {
             List<RoomAvailability> overlapingReservations = roomAvailabilityRepository.findOverlappingReservations(room.getId(), reservationDTO.getCheckInDate(), reservationDTO.getCheckOutDate());
             if (!overlapingReservations.isEmpty()) {
@@ -71,10 +82,10 @@ public class ReservationController {
 
             Reservation reservation = new Reservation();
             reservation.setUser(user);
-            reservation.setAmenities(reservationDTO.getAmenities());
+            reservation.setAmenities(amenities);
             reservation.setCheckInDate(reservationDTO.getCheckInDate());
             reservation.setCheckOutDate(reservationDTO.getCheckOutDate());
-            reservation.setRooms(reservationDTO.getRooms());
+            reservation.setRooms(rooms);
 
             reservationRepository.save(reservation);
             log.info(reservation.toString());
@@ -85,6 +96,7 @@ public class ReservationController {
                 roomAvailability.setCheckOutDate(reservationDTO.getCheckOutDate());
                 roomAvailabilityRepository.save(roomAvailability);
             }
+            emailService.sendEmail(user.getEmail(), "NEW RESERVATION", emailService.getEmailMessage(user, reservation));
             return ResponseEntity.ok("Reservation created successfully.");
         }
         else {
@@ -119,64 +131,51 @@ public class ReservationController {
     @Transactional
     @PutMapping("/admin/reservations/{id}")
     public ResponseEntity<String> updateReservation(@PathVariable Integer id, @RequestBody ReservationDTO reservationDTO) {
-        // Validate the reservation date
         if (isValidDate(reservationDTO)) {
             return ResponseEntity.badRequest().body("Reservation duration must be between 1 and 30 days.");
         }
 
         List<Room> rooms = reservationDTO.getRooms();
-        // A list to hold the RoomAvailability records that we might need to restore in case of failure
         List<RoomAvailability> removedRoomAvailabilities = new ArrayList<>();
 
-        // Step 1: Handle overlapping reservations
         for (Room room : rooms) {
             List<RoomAvailability> overlappingReservations = roomAvailabilityRepository
                     .findOverlappingReservations(room.getId(), reservationDTO.getCheckInDate(), reservationDTO.getCheckOutDate());
-
-            // If there are any overlapping reservations, we need to handle them
             if (!overlappingReservations.isEmpty()) {
-                // Remove the conflicting room availability records (this is temporary)
                 for (RoomAvailability overlap : overlappingReservations) {
-                    // Only remove the availability for rooms that are part of the reservation being updated
                     if (Objects.equals(room.getId(), overlap.getRoom().getId())) {
-                        removedRoomAvailabilities.add(overlap); // Store for possible restoration
+                        removedRoomAvailabilities.add(overlap);
                         roomAvailabilityRepository.delete(overlap);
                     }
                 }
             }
         }
-
-        // Step 2: Update the reservation and its associated room availability
         Optional<Reservation> foundReservation = reservationRepository.findById(id);
         if (foundReservation.isPresent()) {
             Reservation reservation = foundReservation.get();
 
-            // Step 3: Update room availability for the rooms in the reservation
             for (Room room : rooms) {
                 RoomAvailability roomAvailability = new RoomAvailability();
                 roomAvailability.setRoom(room);
                 roomAvailability.setCheckInDate(reservationDTO.getCheckInDate());
                 roomAvailability.setCheckOutDate(reservationDTO.getCheckOutDate());
 
-                // Check if the RoomAvailability already exists, and update it if needed
                 Optional<RoomAvailability> existingAvailability = roomAvailabilityRepository
                         .find(room.getId(), foundReservation.get().getCheckInDate(), foundReservation.get().getCheckOutDate());
                 if (existingAvailability.isPresent()) {
-                    roomAvailability.setId(existingAvailability.get().getId()); // Update existing availability
+                    roomAvailability.setId(existingAvailability.get().getId());
                 }
-                roomAvailabilityRepository.save(roomAvailability); // Save the new RoomAvailability
+                roomAvailabilityRepository.save(roomAvailability);
             }
 
-            // Step 4: Update the reservation details
             reservation.setAmenities(reservationDTO.getAmenities());
             reservation.setCheckInDate(reservationDTO.getCheckInDate());
             reservation.setCheckOutDate(reservationDTO.getCheckOutDate());
-            reservation.setRooms(reservationDTO.getRooms()); // Ensure rooms are correctly mapped in the reservation
+            reservation.setRooms(reservationDTO.getRooms());
             reservationRepository.save(reservation);
 
             return ResponseEntity.ok("Reservation updated successfully.");
         } else {
-            // If the reservation is not found, restore the removed room availability entries
             for (RoomAvailability removed : removedRoomAvailabilities) {
                 roomAvailabilityRepository.save(removed);
             }
@@ -235,4 +234,5 @@ public class ReservationController {
 
         return durationInDays < 1 || durationInDays > 30;
     }
+
 }
