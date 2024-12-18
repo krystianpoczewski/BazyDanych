@@ -16,7 +16,7 @@ import java.util.Optional;
  * Only users with the ADMIN role are authorized to add, update, or delete room amenities.
  */
 @RestController
-@RequestMapping("/room/amenities")
+@RequestMapping("/api")
 public class RoomAmenitiesController {
     @Autowired
     private RoomAmenitiesRepository roomAmenitiesRepository;
@@ -28,8 +28,7 @@ public class RoomAmenitiesController {
      * @param requestRoomAmenity the room amenity to be added
      * @return a ResponseEntity containing the added room amenity, or the existing one if a name conflict arises
      */
-    @PostMapping("/")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/admin/room-amenities")
     public ResponseEntity<RoomAmenities> addRoomAmenity(@RequestBody RoomAmenities requestRoomAmenity) {
         Optional<RoomAmenities> existingRoomAmenity = roomAmenitiesRepository.findByName(requestRoomAmenity.getName());
         if (existingRoomAmenity.isPresent()) {
@@ -48,8 +47,7 @@ public class RoomAmenitiesController {
      * @return a ResponseEntity containing the updated RoomAmenities object if the update is successful,
      *         or a ResponseEntity with a not found status if the room amenity does not exist
      */
-    @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/admin/room-amenities")
     public ResponseEntity<RoomAmenities> updateRoomType(@RequestBody RoomAmenities requestRoomAmenity) {
         Optional<RoomAmenities> existingRoomAmenity = roomAmenitiesRepository.findById(requestRoomAmenity.getId());
         if (existingRoomAmenity.isPresent()) {
@@ -69,8 +67,7 @@ public class RoomAmenitiesController {
      * @return ResponseEntity with a success message if the room amenity is found and deleted,
      *         or a ResponseEntity with a 404 status if the room amenity is not found
      */
-    @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/admin/room-amenities/{id}")
     public ResponseEntity<String> deleteRoomType(@PathVariable Integer id) {
         Optional<RoomAmenities> existingRoomAmenity = roomAmenitiesRepository.findById(id);
         if (existingRoomAmenity.isPresent()) {
@@ -85,7 +82,7 @@ public class RoomAmenitiesController {
      *
      * @return a ResponseEntity containing a list of RoomAmenities objects
      */
-    @GetMapping("/")
+    @GetMapping("/user/room-amenities")
     public ResponseEntity<List<RoomAmenities>> getAllRoomTypes() {
         List<RoomAmenities> roomAmenities = roomAmenitiesRepository.findAll();
         return ResponseEntity.ok(roomAmenities);
@@ -98,8 +95,8 @@ public class RoomAmenitiesController {
      * @return ResponseEntity containing the requested RoomAmenities if found,
      *         or a ResponseEntity with HTTP status 404 (Not Found) if the ID does not exist
      */
-    @GetMapping("/{id}")
-    public ResponseEntity<RoomAmenities> getRoomType(@PathVariable Integer id) {
+    @GetMapping("/user/room-amenities/{id}")
+    public ResponseEntity<RoomAmenities> getRoomAmenity(@PathVariable Integer id) {
         Optional<RoomAmenities> existingRoomAmenity = roomAmenitiesRepository.findById(id);
         if (existingRoomAmenity.isPresent()) {
             return ResponseEntity.ok(existingRoomAmenity.get());

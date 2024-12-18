@@ -19,7 +19,7 @@ import java.util.List;
  * This class is annotated with JPA annotations to map it to a relational database table.
  */
 @Entity
-public class User implements UserDetails {
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -59,7 +59,7 @@ public class User implements UserDetails {
     public User(String firstName, String lastName, String password, String email) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.hashedPassword = hashPassword(password);
+        this.hashedPassword = password;
         this.email = email;
         this.role = UserRole.USER;
     }
@@ -90,9 +90,11 @@ public class User implements UserDetails {
     }
 
     public void setHashedPassword(String password) {
-        this.hashedPassword = hashPassword(password);
+        this.hashedPassword = password;
     }
-
+    public String getHashedPassword(){
+        return hashedPassword;
+    }
     public String getEmail() {
         return email;
     }
@@ -109,42 +111,6 @@ public class User implements UserDetails {
         this.role = role;
     }
 
-
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
-    }
-
-    @Override
-    public String getPassword() {
-        return this.hashedPassword; // Return hashed password for Spring Security
-    }
-
-    @Override
-    public String getUsername() {
-        return this.email; // Use email as the username
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true; // Customize as needed
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true; // Customize as needed
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true; // Customize as needed
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true; // Customize as needed
-    }
 
     @Override
     public String toString() {

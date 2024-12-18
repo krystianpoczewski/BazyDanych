@@ -5,9 +5,10 @@ import com.example.hotel_bd.models.Review;
 import com.example.hotel_bd.models.User;
 import com.example.hotel_bd.repository.ReviewRepository;
 import com.example.hotel_bd.repository.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -36,8 +37,9 @@ import java.util.Optional;
  * - @PreAuthorize: Specifies security roles required to access a method.
  */
 @RestController
-@RequestMapping("/review")
+@RequestMapping("/api")
 public class ReviewController {
+    private static final Logger log = LoggerFactory.getLogger(ReviewController.class);
     @Autowired
     private ReviewRepository reviewRepository;
     @Autowired
@@ -52,8 +54,7 @@ public class ReviewController {
      * @return a ResponseEntity containing the saved review if the user is found,
      *         otherwise a ResponseEntity with a 'not found' status
      */
-    @PostMapping("/")
-    @PreAuthorize("hasRole('USER')")
+    @PostMapping("/user/review")
     public ResponseEntity<Review> addReview(@RequestBody ReviewDTO reviewDTO) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
@@ -79,8 +80,7 @@ public class ReviewController {
      * @return a ResponseEntity with a message "Review updated" if the update is successful,
      *         otherwise a ResponseEntity with a 'not found' status if the review does not exist
      */
-    @PutMapping("/")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/admin/review/{id}")
     public ResponseEntity<String> updateReview(@PathVariable Integer id, @RequestBody ReviewDTO reviewDTO) {
         Optional<Review> foundReview = reviewRepository.findById(id);
         if (foundReview.isPresent()) {
@@ -100,8 +100,7 @@ public class ReviewController {
      * @return a ResponseEntity with a message "Review deleted" if the deletion is successful,
      *         otherwise a ResponseEntity with a 'not found' status if the review does not exist
      */
-    @DeleteMapping("/")
-    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/admin/review/{id}")
     public ResponseEntity<String> deleteReview(@PathVariable Integer id) {
         Optional<Review> foundReview = reviewRepository.findById(id);
         if (foundReview.isPresent()) {
@@ -115,8 +114,18 @@ public class ReviewController {
      *
      * @return a ResponseEntity containing a list of all Review objects
      */
-    @GetMapping("/all")
+    @GetMapping("/user/review")
     public ResponseEntity<List<Review>> getAllReviews() {
+        log.info("?????");
         return ResponseEntity.ok(reviewRepository.findAll());
+    }
+
+    @GetMapping("/user/review/{id}")
+    public ResponseEntity<Review> getReview(@PathVariable Integer id) {
+        Optional<Review> foundReview = reviewRepository.findById(id);
+        if (foundReview.isPresent()) {
+            return ResponseEntity.ok(foundReview.get());
+        }
+        return ResponseEntity.notFound().build();
     }
 }

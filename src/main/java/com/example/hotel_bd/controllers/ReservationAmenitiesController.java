@@ -17,7 +17,7 @@ import java.util.Optional;
  * Provides endpoints for creating, updating, deleting, and retrieving reservation amenities.
  */
 @RestController
-@RequestMapping("/reservation/amenities")
+@RequestMapping("/api")
 public class ReservationAmenitiesController {
     @Autowired
     ReservationAmenitiesRepository reservationAmenitiesRepository;
@@ -30,8 +30,7 @@ public class ReservationAmenitiesController {
      * @return ResponseEntity containing the created ReservationAmenities object if successful,
      *         or a bad request response with the existing reservation amenity if a duplicate is found.
      */
-    @PostMapping("/")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/admin/reservation-amenities")
     public ResponseEntity<ReservationAmenities> addReservationAmenities(@RequestBody ReservationAmenitiesDTO reservationAmenitiesDTO) {
         Optional<ReservationAmenities> existingReservationAmenity = reservationAmenitiesRepository.findByName(reservationAmenitiesDTO.getName());
         if(existingReservationAmenity.isPresent()) {
@@ -53,8 +52,7 @@ public class ReservationAmenitiesController {
      * @return ResponseEntity containing the updated ReservationAmenities object if successful,
      *         or a bad request response if the reservation amenity is not found.
      */
-    @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/admin/reservation-amenities/{id}")
     public ResponseEntity<ReservationAmenities> updateReservationAmenities(@PathVariable Integer id, @RequestBody ReservationAmenitiesDTO reservationAmenitiesDTO) {
         Optional<ReservationAmenities> existingReservationAmenity = reservationAmenitiesRepository.findById(id);
         if(existingReservationAmenity.isEmpty()) {
@@ -75,8 +73,7 @@ public class ReservationAmenitiesController {
      * @return a ResponseEntity with a message indicating the result of the deletion request;
      *         returns a bad request response if the reservation amenity is not found
      */
-    @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/admin/reservation-amenities/{id}")
     public ResponseEntity<String> deleteReservationAmenities(@PathVariable Integer id) {
         Optional<ReservationAmenities> existingReservationAmenity = reservationAmenitiesRepository.findById(id);
         if(existingReservationAmenity.isEmpty()) {
@@ -90,8 +87,7 @@ public class ReservationAmenitiesController {
      *
      * @return a ResponseEntity containing a list of all ReservationAmenities objects
      */
-    @GetMapping("/")
-    @PreAuthorize("hasRole('USER')")
+    @GetMapping("/user/reservation-amenities")
     public ResponseEntity<List<ReservationAmenities>> getAllReservationAmenities() {
         List<ReservationAmenities> allReservationAmenities = reservationAmenitiesRepository.findAll();
         return ResponseEntity.ok(allReservationAmenities);
@@ -104,7 +100,7 @@ public class ReservationAmenitiesController {
      * @return a ResponseEntity containing the ReservationAmenities object if found;
      *         otherwise, a ResponseEntity with a bad request status
      */
-    @GetMapping("/{id}")
+    @GetMapping("/user/reservation-amenities/{id}")
     public ResponseEntity<ReservationAmenities> getReservationAmenity(@PathVariable Integer id){
         Optional<ReservationAmenities> existingReservationAmenity = reservationAmenitiesRepository.findById(id);
         if(existingReservationAmenity.isEmpty()) {

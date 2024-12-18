@@ -15,7 +15,7 @@ import java.util.Optional;
  * Provides CRUD operations for RoomTypes in the system.
  */
 @RestController
-@RequestMapping("/room/type")
+@RequestMapping("/api")
 public class RoomTypeController {
 
     @Autowired
@@ -29,8 +29,7 @@ public class RoomTypeController {
      * @return a ResponseEntity containing the newly added RoomType, or a bad request response if the
      *         RoomType already exists
      */
-    @PostMapping("/")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/admin/room-type")
     public ResponseEntity<RoomType> addRoomType(@RequestBody RoomType requestRoomType) {
         Optional<RoomType> existingRoomType = roomTypeRepository.findByName(requestRoomType.getName());
         if (existingRoomType.isPresent()) {
@@ -48,10 +47,9 @@ public class RoomTypeController {
      * @return a ResponseEntity containing the updated RoomType if successful, or a not found response
      *         if the RoomType does not exist
      */
-    @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<RoomType> updateRoomType(@RequestBody RoomType requestRoomType) {
-        Optional<RoomType> existingRoomTypeOpt = roomTypeRepository.findById(requestRoomType.getId());
+    @PutMapping("/admin/room-type/{id}")
+    public ResponseEntity<RoomType> updateRoomType(Integer id, @RequestBody RoomType requestRoomType) {
+        Optional<RoomType> existingRoomTypeOpt = roomTypeRepository.findById(id);
         if (existingRoomTypeOpt.isPresent()) {
             RoomType existingRoomType = existingRoomTypeOpt.get();
             existingRoomType.setName(requestRoomType.getName());
@@ -69,8 +67,7 @@ public class RoomTypeController {
      * @return a ResponseEntity with a success message if the RoomType is found and deleted,
      *         or a not found response if the RoomType does not exist
      */
-    @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/admin/room-type/{id}")
     public ResponseEntity<String> deleteRoomType(@PathVariable Integer id) {
         Optional<RoomType> roomTypeOpt = roomTypeRepository.findById(id);
         if (roomTypeOpt.isPresent()) {
@@ -85,7 +82,7 @@ public class RoomTypeController {
      *
      * @return a ResponseEntity containing a list of RoomType instances
      */
-    @GetMapping("/")
+    @GetMapping("/user/room-type")
     public ResponseEntity<List<RoomType>> getAllRoomTypes() {
         List<RoomType> roomTypes = roomTypeRepository.findAll();
         return ResponseEntity.ok(roomTypes);
@@ -97,7 +94,7 @@ public class RoomTypeController {
      * @param id the ID of the RoomType to retrieve
      * @return a ResponseEntity containing the RoomType if found, or a not found response if the RoomType does not exist
      */
-    @GetMapping("/{id}")
+    @GetMapping("/user/room-type/{id}")
     public ResponseEntity<RoomType> getRoomTypeById(@PathVariable Integer id) {
         Optional<RoomType> roomTypeOpt = roomTypeRepository.findById(id);
         if (roomTypeOpt.isPresent()) {

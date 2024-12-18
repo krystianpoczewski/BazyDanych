@@ -24,7 +24,7 @@ import java.util.Optional;
  * - Get room details by ID
  */
 @RestController
-@RequestMapping("/room")
+@RequestMapping("/api")
 public class RoomController {
     @Autowired
     RoomRepository roomRepo;
@@ -35,8 +35,7 @@ public class RoomController {
      * @param roomDTO the data transfer object containing the details of the room to be added, including capacity, amenities, type, and price per night
      * @return a ResponseEntity containing the room entity that was saved, wrapped in an HTTP response with a status of 200 OK
      */
-    @PostMapping("/")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/admin/room")
     public ResponseEntity<Room> addRoom(@RequestBody RoomDTO roomDTO) {
         Room room = new Room();
         room.setCapacity(roomDTO.getCapacity());
@@ -55,8 +54,7 @@ public class RoomController {
      * @return a ResponseEntity containing a success message if the room was deleted,
      *         or a not found status if no room with the given ID exists
      */
-    @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/admin/room/{id}")
     public ResponseEntity<String> removeRoom(@PathVariable Integer id) {
         Optional<Room> existingRoomOpt = roomRepo.findById(id);
         if (existingRoomOpt.isPresent()) {
@@ -75,8 +73,7 @@ public class RoomController {
      * @return a ResponseEntity containing the updated Room object if the update was successful,
      *         or a 404 Not Found status if no room with the given ID exists
      */
-    @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("admin/room/{id}")
     public ResponseEntity<Room> updateRoom(@PathVariable Integer id, @RequestBody RoomDTO roomDTO) {
         Optional<Room> existingRoomOpt = roomRepo.findById(id);
         if (existingRoomOpt.isPresent()) {
@@ -98,7 +95,7 @@ public class RoomController {
      * @return a ResponseEntity containing a list of all Room objects, wrapped in
      *         an HTTP response with a status of 200 OK
      */
-    @GetMapping("/")
+    @GetMapping("/user/room")
     public ResponseEntity<List<Room>> getAllRooms() {
         List<Room> rooms = roomRepo.findAll();
         return ResponseEntity.ok(rooms);
@@ -110,7 +107,7 @@ public class RoomController {
      * @param id the ID of the room to be retrieved
      * @return a ResponseEntity containing the Room object if found, or a 404 Not Found status if no room with the given ID exists
      */
-    @GetMapping("/{id}")
+    @GetMapping("/user/room/{id}")
     public ResponseEntity<Room> getRoomById(@PathVariable Integer id) {
         Optional<Room> existingRoomOpt = roomRepo.findById(id);
         if (existingRoomOpt.isPresent()) {

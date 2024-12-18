@@ -1,7 +1,9 @@
 package com.example.hotel_bd.controllers;
 
 import com.example.hotel_bd.models.User;
+import com.example.hotel_bd.repository.ReviewRepository;
 import com.example.hotel_bd.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -18,12 +20,13 @@ import java.util.Optional;
  * All requests are prefixed with "/api/users".
  */
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api/admin/users")
 public class UserController {
 
     @Autowired
     private UserRepository userRepository;
-
+    @Autowired
+    private ReviewRepository reviewRepository;
     /**
      * Retrieves a list of all users from the database.
      *
@@ -31,7 +34,6 @@ public class UserController {
      *         wrapped with an HTTP status 200 (OK) response.
      */
     @GetMapping("/")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<User>> findAllUsers() {
         List<User> users = userRepository.findAll();
         return ResponseEntity.ok(users);
@@ -43,8 +45,7 @@ public class UserController {
      * @param email the email address of the user to be retrieved
      * @return a ResponseEntity containing the found user or a not found response if the user does not exist
      */
-    @GetMapping("/email/{email}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/{email}")
     public ResponseEntity<User> findByEmail(@PathVariable String email) {
         Optional<User> user = userRepository.findByEmail(email);
         return user.map(ResponseEntity::ok)
@@ -59,7 +60,6 @@ public class UserController {
      * @return a ResponseEntity containing the updated user object if the user is found, else a ResponseEntity with a not found status
      */
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<User> updateUser(@PathVariable Integer id, @RequestBody User updatedUser) {
         Optional<User> existingUserOpt = userRepository.findById(id);
         if (existingUserOpt.isPresent()) {
@@ -82,10 +82,11 @@ public class UserController {
      *         or a ResponseEntity with a not found status if the user does not exist
      */
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @Transactional
     public ResponseEntity<String> deleteUser(@PathVariable Integer id) {
         if (userRepository.existsById(id)) {
             userRepository.deleteById(id);
+            reviewRepository.findByUserId(id).forEach(review -> reviewRepository.delete(review));
             return ResponseEntity.ok("User deleted successfully");
         }
         return ResponseEntity.notFound().build();

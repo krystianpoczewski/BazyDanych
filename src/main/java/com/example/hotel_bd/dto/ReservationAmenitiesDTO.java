@@ -23,4 +23,20 @@ public class ReservationAmenitiesDTO {
     @NotNull
     @Min(0)
     private BigDecimal pricePerNight;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public BigDecimal getPricePerNight() {
+        return pricePerNight;
+    }
+
+    public void setPricePerNight(BigDecimal pricePerNight) {
+        this.pricePerNight = pricePerNight;
+    }
 }

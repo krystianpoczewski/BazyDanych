@@ -40,4 +40,44 @@ public class ReservationDTO {
     @NotNull
     private List<Room> rooms;
     private List<ReservationAmenities> amenities;
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public List<ReservationAmenities> getAmenities() {
+        return amenities;
+    }
+
+    public void setAmenities(List<ReservationAmenities> amenities) {
+        this.amenities = amenities;
+    }
+
+    public List<Room> getRooms() {
+        return rooms;
+    }
+
+    public void setRooms(List<Room> rooms) {
+        this.rooms = rooms;
+    }
+
+    public Date getCheckOutDate() {
+        return checkOutDate;
+    }
+
+    public void setCheckOutDate(Date checkOutDate) {
+        this.checkOutDate = checkOutDate;
+    }
+
+    public Date getCheckInDate() {
+        return checkInDate;
+    }
+
+    public void setCheckInDate(Date checkInDate) {
+        this.checkInDate = checkInDate;
+    }
 }

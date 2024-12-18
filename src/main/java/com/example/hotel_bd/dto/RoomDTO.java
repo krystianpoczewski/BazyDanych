@@ -40,4 +40,36 @@ public class RoomDTO {
     private BigDecimal pricePerNight;
     @NotNull
     private List<RoomAmenities> amenities;
+
+    public RoomType getType() {
+        return type;
+    }
+
+    public void setType(RoomType type) {
+        this.type = type;
+    }
+
+    public List<RoomAmenities> getAmenities() {
+        return amenities;
+    }
+
+    public void setAmenities(List<RoomAmenities> amenities) {
+        this.amenities = amenities;
+    }
+
+    public BigDecimal getPricePerNight() {
+        return pricePerNight;
+    }
+
+    public void setPricePerNight(BigDecimal pricePerNight) {
+        this.pricePerNight = pricePerNight;
+    }
+
+    public Integer getCapacity() {
+        return capacity;
+    }
+
+    public void setCapacity(Integer capacity) {
+        this.capacity = capacity;
+    }
 }
