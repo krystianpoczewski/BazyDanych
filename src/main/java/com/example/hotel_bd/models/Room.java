@@ -40,6 +40,7 @@ public class Room {
     private Integer capacity;
 
     @NotNull
+    @Min(0)
     @Column(name = "price_per_night")
     private BigDecimal pricePerNight;
 
