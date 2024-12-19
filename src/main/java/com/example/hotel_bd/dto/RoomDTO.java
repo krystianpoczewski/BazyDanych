@@ -37,6 +37,7 @@ public class RoomDTO {
     @Max(8)
     private Integer capacity;
     @NotNull
+    @Min(0)
     private BigDecimal pricePerNight;
     @NotNull
     private List<RoomAmenities> amenities;
