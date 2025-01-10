@@ -12,7 +12,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                 <div class="reservation">
                     <p><strong>Check-in:</strong> ${new Date(reservation.checkInDate).toLocaleDateString()}</p>
                     <p><strong>Check-out:</strong> ${new Date(reservation.checkOutDate).toLocaleDateString()}</p>
-                    <p><strong>Room ID:</strong> ${reservation.roomId}</p>
+                    <p><strong>Rooms ID:</strong></p>
+                    <ul>
+                        ${reservation.rooms.map(room => `<li>${room.id}</li>`).join('')}
+                    </ul>
                 </div>
             `).join('');
         } catch (error) {

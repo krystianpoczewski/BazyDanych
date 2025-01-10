@@ -4,19 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reviews</title>
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="../static/css/styles.css">
 </head>
 <body>
 <nav>
-    <a href="index.html">Home</a>
-    <a href="rooms.html">Rooms</a>
-    <a href="reservations.html">Reservations</a>
-    <a href="reviews.html">Reviews</a>
-    <a href="login.html">Login</a>
-    <a href="register.html">Register</a>
+    <a href="/home">Home</a>
+    <a href="/rooms">Rooms</a>
+    <a href="/reservations">Reservations</a>
+    <a href="/reviews">Reviews</a>
+    <a href="/login">Login</a>
+    <a href="/register">Register</a>
 </nav>
 <h1>Reviews</h1>
 <div id="reviewList"></div>
+<div id="pagination">
+    <button id="prevBtn">&lt; Previous</button>
+    <button id="nextBtn">Next &gt;</button>
+</div>
+
 <form id="reviewForm">
     <label for="rating">Rating (1-5):</label>
     <input type="number" id="rating" name="rating" min="1" max="5" required>
@@ -26,6 +31,6 @@
     <br>
     <button type="submit">Submit Review</button>
 </form>
-<script type="module" src="js/review.js"></script>
+<script type="module" src="../static/js/review.js"></script>
 </body>
 </html>

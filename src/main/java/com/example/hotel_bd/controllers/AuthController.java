@@ -8,6 +8,9 @@ import com.example.hotel_bd.models.User;
 import com.example.hotel_bd.models.UserRole;
 import com.example.hotel_bd.repository.UserRepository;
 import com.example.hotel_bd.utils.JwtUtils;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -44,11 +47,23 @@ public class AuthController {
                     new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
             );
             String token = jwtUtils.generateToken(request.getEmail(), authentication.getAuthorities().toString());
-            return ResponseEntity.ok(new AuthResponse(token));
+
+            ResponseCookie cookie = ResponseCookie.from("jwt", token)
+                    .httpOnly(false)
+                    .secure(true)
+                    .path("/")
+                    .maxAge(24 * 60 * 60)
+                    .sameSite("Strict")
+                    .build();
+
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.SET_COOKIE, cookie.toString())
+                    .body(new AuthResponse(token));
         } catch (AuthenticationException e) {
             throw new RuntimeException("Invalid credentials");
         }
     }
+
 
     @PostMapping("/auth/register")
     public ResponseEntity<String> register(@RequestBody UserDTO request) {

@@ -8,8 +8,13 @@ document.addEventListener('DOMContentLoaded', async () => {
             roomList.innerHTML = rooms.map(room => `
                 <div class="room">
                     <h3>${room.type.name}</h3>
+                    <p>Id: ${room.id}</p>
                     <p>Capacity: ${room.capacity}</p>
                     <p>Price per night: $${room.pricePerNight}</p>
+                    <p>Amenities:</p>
+                    <ul>
+                        ${room.amenities.map(amenity => `<li>${amenity.name}</li>`).join('')}
+                    </ul>
                 </div>
             `).join('');
         } catch (error) {

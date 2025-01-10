@@ -1,20 +1,40 @@
 import { fetchData } from './api.js';
 
+
 document.getElementById('loginForm')?.addEventListener('submit', async (e) => {
     e.preventDefault();
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
 
     try {
-        const data = await fetchData('/auth/login', 'POST', { email, password });
-        localStorage.setItem('token', data.token);
+        const response = await fetch('/auth/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email, password }),
+        });
+
+        if (!response.ok) {
+            throw new Error('Invalid credentials');
+        }
+
+        const responseData = await response.json();
+        const token = responseData.token; // Use the token from the response body
+        if (!token) {
+            throw new Error('Token not received');
+        }
+        localStorage.setItem('token', token);
         alert('Login successful!');
-        window.location.href = 'index.html';
+        window.location.href = '/home';
     } catch (error) {
         console.error('Login failed:', error);
         alert('Login failed. Please check your credentials.');
     }
 });
+
+
+
 
 document.getElementById('registerForm')?.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -32,3 +52,4 @@ document.getElementById('registerForm')?.addEventListener('submit', async (e) =>
         alert('Registration failed. Please try again.');
     }
 });
+

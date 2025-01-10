@@ -8,6 +8,9 @@ import com.example.hotel_bd.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -128,4 +131,22 @@ public class ReviewController {
         }
         return ResponseEntity.notFound().build();
     }
+
+    @GetMapping("/user/reviewPage")
+    public ResponseEntity<List<Review>> getAllReviews(
+            @RequestParam(defaultValue = "0") int page,  // Default page is 0 (first page)
+            @RequestParam(defaultValue = "5") int limit  // Default limit is 5 reviews per page
+    ) {
+        log.info("Fetching reviews - Page: {}, Limit: {}", page, limit);
+
+        // PageRequest handles pagination and sorting
+        Pageable pageable = PageRequest.of(page, limit);
+
+        // Get the reviews for the given page
+        Page<Review> reviewsPage = reviewRepository.findAll(pageable);
+
+        // Return the list of reviews for the current page
+        return ResponseEntity.ok(reviewsPage.getContent());
+    }
+
 }
