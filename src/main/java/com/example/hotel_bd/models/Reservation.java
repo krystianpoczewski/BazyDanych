@@ -1,5 +1,6 @@
 package com.example.hotel_bd.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
@@ -80,7 +81,10 @@ public class Reservation {
 
         return totalPrice.divide(BigDecimal.valueOf(totalDays), 2, RoundingMode.HALF_UP);
     }
-
+    @JsonProperty("calculatedPrice")
+    public BigDecimal getCalculatedPrice() {
+        return calculatePrice();
+    }
 
     public Reservation() {}
 

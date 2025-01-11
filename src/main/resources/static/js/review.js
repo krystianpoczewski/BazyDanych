@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Previous button functionality
     prevBtn?.addEventListener('click', () => {
-        if (currentPage > 1) {
+        if (currentPage > 0) {
             currentPage--;
             fetchReviews();
         }

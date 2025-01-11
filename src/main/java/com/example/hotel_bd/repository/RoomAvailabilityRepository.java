@@ -25,4 +25,6 @@ public interface RoomAvailabilityRepository extends JpaRepository<RoomAvailabili
     Optional<RoomAvailability> find(@Param("roomId") Integer roomId,
                                            @Param("startDate") Date startDate,
                                            @Param("endDate") Date endDate);
+
+    List<RoomAvailability> findByRoomId(Integer roomId);
 }

@@ -16,7 +16,7 @@
     <a href="/register">Register</a>
 </nav>
 <h1>Reservations</h1>
-<div id="reservationList"></div>
+<div id="userReservationList"></div>
 <form id="reservationForm">
     <label for="checkInDate">Check-in Date:</label>
     <input type="date" id="checkInDate" name="checkInDate" required>
@@ -24,8 +24,13 @@
     <label for="checkOutDate">Check-out Date:</label>
     <input type="date" id="checkOutDate" name="checkOutDate" required>
     <br>
-    <label for="roomId">Room ID:</label>
-    <input type="number" id="roomId" name="roomId" required>
+    <label for="roomIds">Room IDs:</label>
+    <select id="roomIds" name="roomIds" multiple required>
+        <option value="">Select Room Ids</option>
+    </select>
+    <br>
+    <label for="amenities">Select Amenities:</label>
+    <select id="amenities" name="amenities" multiple size="5" style="width: 100%;"></select>
     <br>
     <button type="submit">Create Reservation</button>
 </form>

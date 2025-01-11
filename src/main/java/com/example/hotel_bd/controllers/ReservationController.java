@@ -76,6 +76,7 @@ public class ReservationController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
         log.info(email);
+        log.info("????");
         Optional<User> foundUser = userRepository.findByEmail(email);
         if (foundUser.isPresent()) {
             User user = foundUser.get();

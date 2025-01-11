@@ -15,6 +15,29 @@
     <a href="/login">Login</a>
     <a href="/register">Register</a>
 </nav>
+<form id="roomSearchForm">
+    <label for="roomType">Room Type:</label>
+    <select id="roomType" name="roomType">
+        <option value="">Select Room Type</option>
+        <!-- Room types will be populated here dynamically -->
+    </select>
+
+    <label for="capacity">Capacity:</label>
+    <input type="number" id="capacity" name="capacity" placeholder="Minimum Capacity">
+
+    <label for="maxPrice">Max Price:</label>
+    <input type="number" id="maxPrice" name="maxPrice" step="0.01" placeholder="Max Price">
+
+    <label for="startDate">Start Date:</label>
+    <input type="date" id="startDate" name="startDate">
+
+    <label for="endDate">End Date:</label>
+    <input type="date" id="endDate" name="endDate">
+
+    <button type="submit">Search</button>
+</form>
+
+
 <h1>Rooms</h1>
 <div id="roomList"></div>
 <script type="module" src="../static/js/room.js"></script>

@@ -1,13 +1,20 @@
 package com.example.hotel_bd.controllers;
 
 import com.example.hotel_bd.dto.RoomDTO;
+import com.example.hotel_bd.models.Reservation;
 import com.example.hotel_bd.models.Room;
+import com.example.hotel_bd.models.RoomAvailability;
+import com.example.hotel_bd.repository.ReservationRepository;
+import com.example.hotel_bd.repository.RoomAvailabilityRepository;
 import com.example.hotel_bd.repository.RoomRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,7 +35,10 @@ import java.util.Optional;
 public class RoomController {
     @Autowired
     RoomRepository roomRepo;
-
+    @Autowired
+    RoomAvailabilityRepository availabilityRepo;
+    @Autowired
+    ReservationRepository reservationRepo;
     /**
      * Adds a new room to the repository. This method is accessible only to users with the ADMIN role.
      *
@@ -55,13 +65,26 @@ public class RoomController {
      *         or a not found status if no room with the given ID exists
      */
     @DeleteMapping("/admin/room/{id}")
+    @Transactional
     public ResponseEntity<String> removeRoom(@PathVariable Integer id) {
         Optional<Room> existingRoomOpt = roomRepo.findById(id);
-        if (existingRoomOpt.isPresent()) {
-            roomRepo.deleteById(id);
-            return ResponseEntity.ok("Room deleted successfully.");
+        if (!existingRoomOpt.isPresent()) {
+            return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.notFound().build();
+        List<RoomAvailability> roomAvailabilities = availabilityRepo.findByRoomId(id);
+        if (!roomAvailabilities.isEmpty()) {
+            for (RoomAvailability availability : roomAvailabilities) {
+                availabilityRepo.delete(availability);
+            }
+        }
+        List<Reservation> reservations = reservationRepo.findByRoomId(id);
+        if(!reservations.isEmpty()) {
+            for (Reservation reservation : reservations) {
+                reservationRepo.delete(reservation);
+            }
+        }
+        roomRepo.deleteById(id);
+        return ResponseEntity.ok("Room deleted successfully.");
     }
 
     /**
@@ -116,4 +139,17 @@ public class RoomController {
         }
         return ResponseEntity.notFound().build();
     }
+
+    @GetMapping("/user/room/search")
+    public ResponseEntity<List<Room>> searchRooms(
+            @RequestParam(required = false) Integer roomType,
+            @RequestParam(required = false) Integer capacity,
+            @RequestParam(required = false) BigDecimal maxPrice,
+            @RequestParam(required = false) Date startDate,
+            @RequestParam(required = false) Date endDate) {
+
+        List<Room> availableRooms = roomRepo.findAvailableRoomsByFilters(roomType, capacity, maxPrice, startDate, endDate);
+        return ResponseEntity.ok(availableRooms);
+    }
+
 }

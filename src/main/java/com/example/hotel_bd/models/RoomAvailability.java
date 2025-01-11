@@ -2,6 +2,7 @@ package com.example.hotel_bd.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+
 import java.util.Date;
 
 /**
