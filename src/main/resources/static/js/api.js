@@ -25,9 +25,9 @@ async function fetchData(endpoint, method = 'GET', body = null) {
     if (body) {
         options.body = JSON.stringify(body);
     }
-
+    const url = endpoint.startsWith('/auth/') ? "https://localhost:8080"+endpoint : `${API_URL}${endpoint}`;
     try {
-        const response = await fetch(`${API_URL}${endpoint}`, options);
+        const response = await fetch(url, options);
 
         // Check if the response contains JSON
         const contentType = response.headers.get('Content-Type');

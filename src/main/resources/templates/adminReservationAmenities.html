@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Reviews</title>
+    <link rel="stylesheet" href="../static/css/styles.css">
+</head>
+<body>
+<nav>
+    <a href="/home">Home</a>
+    <a href="/rooms">Rooms</a>
+    <a href="/reservations">Reservations</a>
+    <a href="/reviews">Reviews</a>
+    <a href="/login">Login</a>
+    <a href="/register">Register</a>
+</nav>
+<h1>Manage All Reservation Amenities</h1>
+<div id="newAmenityFormContainer">
+    <h2>Add New Reservation Amenity</h2>
+    <form id="newAmenityForm">
+        <label for="newAmenityName">Name:</label>
+        <input type="text" id="newAmenityName" name="name" required>
+        <br>
+        <label for="newAmenityPricePerNight">Price Per Night:</label>
+        <input type="number" id="newAmenityPricePerNight" name="pricePerNight" min="0" step="0.01" required>
+        <br>
+        <button type="submit">Add Amenity</button>
+    </form>
+</div>
+<div id="reservationAmenitiesList"></div>
+<script type="module" src="../static/js/adminReservationAmenities.js"></script>
+</body>
+</html>

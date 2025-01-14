@@ -1,5 +1,6 @@
 package com.example.hotel_bd.controllers;
 
+import com.example.hotel_bd.dto.NameRequest;
 import com.example.hotel_bd.models.RoomType;
 import com.example.hotel_bd.repository.RoomTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,11 +49,11 @@ public class RoomTypeController {
      *         if the RoomType does not exist
      */
     @PutMapping("/admin/room-type/{id}")
-    public ResponseEntity<RoomType> updateRoomType(Integer id, @RequestBody RoomType requestRoomType) {
+    public ResponseEntity<RoomType> updateRoomType(@PathVariable Integer id, @RequestBody NameRequest requestName) {
         Optional<RoomType> existingRoomTypeOpt = roomTypeRepository.findById(id);
         if (existingRoomTypeOpt.isPresent()) {
             RoomType existingRoomType = existingRoomTypeOpt.get();
-            existingRoomType.setName(requestRoomType.getName());
+            existingRoomType.setName(requestName.getName());
             roomTypeRepository.save(existingRoomType);
             return ResponseEntity.ok(existingRoomType);
         }

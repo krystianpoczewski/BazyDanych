@@ -47,4 +47,26 @@ public class ViewController {
         model.addAttribute("title", "Hotel Bd");
         return "admin";
     }
+
+    @GetMapping("/admin/reviews")
+    public String AdminReviewPage(Model model){
+        model.addAttribute("title", "Hotel Bd");
+        return "adminReviews";
+    }
+
+    @GetMapping("/admin/reservation-amenities")
+    public String AdminReservationAmenitiesPage(Model model){
+        model.addAttribute("title", "Hotel Bd");
+        return "adminReservationAmenities";
+    }
+    @GetMapping("/admin/room-type")
+    public String AdminRoomTypePage(Model model){
+        model.addAttribute("title", "Hotel Bd");
+        return "adminRoomType";
+    }
+    @GetMapping("/admin/room-amenities")
+    public String AdminRoomAmenityPage(Model model){
+        model.addAttribute("title", "Hotel Bd");
+        return "adminRoomAmenities";
+    }
 }
