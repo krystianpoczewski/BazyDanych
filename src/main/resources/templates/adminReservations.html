@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hotel Booking</title>
-    <base href="/">
+    <title>Manage All Rooms</title>
     <link rel="stylesheet" href="../static/css/styles.css">
 </head>
 <body>
@@ -15,12 +14,19 @@
     <a href="/reviews">Reviews</a>
     <a href="/login">Login</a>
     <a href="/register">Register</a>
-    <a href="/admin" id="admin-panel-link" style="display: none;">Admin Panel</a>
 </nav>
-<h1><strong>Admin Panel</strong></h1>
-<a href="/admin/room-amenities"><strong>Room amenities</strong></a>
-<a href="/admin/room-type"><strong>Room types</strong></a>
-<a href="/admin/reservation-amenities"><strong>Reservation amenities</strong></a>
-<a href="/admin/reviews"><strong>Reviews</strong></a>
+
+<h1>Reservations Management</h1>
+
+<h2>Existing Reservations</h2>
+<div id="reservationList">
+    <!-- List of reservations will be rendered here by JavaScript -->
+</div>
+
+<div id="editFormContainer">
+    <!-- Edit reservation form will be injected here by JavaScript -->
+</div>
+
+<script type="module" src="../static/js/adminReservations.js"></script>
 </body>
 </html>

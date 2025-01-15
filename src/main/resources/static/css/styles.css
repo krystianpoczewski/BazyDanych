@@ -35,3 +35,84 @@ textarea {
     border: 1px solid #ccc;
     border-radius: 4px;
 }
+
+/* General form styling */
+#roomSearchForm {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+/* Ensure each label-input pair stays on the same line */
+.form-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Optional: make form elements look more uniform */
+label {
+    width: 100px; /* Adjust as needed for consistent label width */
+    text-align: right;
+}
+input, select {
+    flex-grow: 1;
+}
+form button {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 3px;
+}
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    padding: 0;
+    background-color: #f9f9f9;
+}
+h1, h2 {
+    color: #333;
+}
+.room {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+    background: #fff;
+}
+/* General form styling */
+.form-group {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Adds spacing between label and input */
+    margin-bottom: 1rem; /* Ensures consistent spacing between form fields */
+}
+
+label {
+    width: 150px; /* Fixed width for consistent alignment */
+    text-align: right; /* Aligns label text to the right */
+    font-weight: bold; /* Makes labels stand out */
+}
+
+input, select {
+    flex-grow: 1; /* Ensures input elements take up remaining space */
+    padding: 8px; /* Adds padding inside input elements */
+    border: 1px solid #ccc; /* Consistent border style */
+    border-radius: 4px; /* Rounded corners for inputs */
+}
+
+button {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+button:hover {
+    background-color: #0056b3; /* Darker shade on hover */
+}

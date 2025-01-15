@@ -61,10 +61,13 @@ public class Reservation {
 
         BigDecimal totalPrice = BigDecimal.ZERO;
 
+        // Add room prices
         for (Room room : rooms) {
             BigDecimal roomPrice = room.getPricePerNight() != null ? room.getPricePerNight() : BigDecimal.ZERO;
             totalPrice = totalPrice.add(roomPrice);
         }
+
+        // Add amenities prices
         if (amenities != null && !amenities.isEmpty()) {
             for (ReservationAmenities amenity : amenities) {
                 BigDecimal amenityPrice = amenity.getPricePerNight() != null ? amenity.getPricePerNight() : BigDecimal.ZERO;
@@ -72,15 +75,25 @@ public class Reservation {
             }
         }
 
+        // Calculate duration in days
+        if (checkInDate == null || checkOutDate == null) {
+            return BigDecimal.ZERO;  // Return 0 if dates are null
+        }
+
         long durationInMillis = checkOutDate.getTime() - checkInDate.getTime();
         long totalDays = TimeUnit.MILLISECONDS.toDays(durationInMillis);
 
         if (totalDays <= 0) {
-            return BigDecimal.ZERO;
+            return BigDecimal.ZERO; // Return 0 if check-out date is not after check-in date
         }
 
-        return totalPrice.divide(BigDecimal.valueOf(totalDays), 2, RoundingMode.HALF_UP);
+        // Multiply total price by number of days
+        BigDecimal totalAmount = totalPrice.multiply(BigDecimal.valueOf(totalDays));
+
+        // Round to two decimal places
+        return totalAmount.setScale(2, RoundingMode.HALF_UP);
     }
+
     @JsonProperty("calculatedPrice")
     public BigDecimal getCalculatedPrice() {
         return calculatePrice();

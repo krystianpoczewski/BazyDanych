@@ -69,4 +69,14 @@ public class ViewController {
         model.addAttribute("title", "Hotel Bd");
         return "adminRoomAmenities";
     }
+    @GetMapping("/admin/room")
+    public String AdminRoomPage(Model model){
+        model.addAttribute("title", "Hotel Bd");
+        return "adminRoom";
+    }
+    @GetMapping("/admin/reservation")
+    public String AdminReservationPage(Model model){
+        model.addAttribute("title", "Hotel Bd");
+        return "adminReservations";
+    }
 }

@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * ReservationRepository provides an interface for managing Reservation entities
@@ -22,4 +23,5 @@ public interface ReservationRepository extends JpaRepository<Reservation, Intege
     List<Reservation> findByUser(String email);
     @Query("SELECT rr FROM Reservation rr JOIN rr.rooms r WHERE r.id = :roomId")
     List<Reservation> findByRoomId(Integer roomId);
+    Optional<Reservation> findById(Integer id);
 }

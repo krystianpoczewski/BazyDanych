@@ -16,26 +16,36 @@
     <a href="/register">Register</a>
 </nav>
 <form id="roomSearchForm">
-    <label for="roomType">Room Type:</label>
-    <select id="roomType" name="roomType">
-        <option value="">Select Room Type</option>
-        <!-- Room types will be populated here dynamically -->
-    </select>
+    <div class="form-group">
+        <label for="roomType">Room Type:</label>
+        <select id="roomType" name="roomType">
+            <option value="">Select Room Type</option>
+        </select>
+    </div>
 
-    <label for="capacity">Capacity:</label>
-    <input type="number" id="capacity" name="capacity" placeholder="Minimum Capacity">
+    <div class="form-group">
+        <label for="capacity">Capacity:</label>
+        <input type="number" id="capacity" name="capacity" placeholder="Minimum Capacity">
+    </div>
 
-    <label for="maxPrice">Max Price:</label>
-    <input type="number" id="maxPrice" name="maxPrice" step="0.01" placeholder="Max Price">
+    <div class="form-group">
+        <label for="maxPrice">Max Price:</label>
+        <input type="number" id="maxPrice" name="maxPrice" step="0.01" placeholder="Max Price">
+    </div>
 
-    <label for="startDate">Start Date:</label>
-    <input type="date" id="startDate" name="startDate">
+    <div class="form-group">
+        <label for="startDate">Start Date:</label>
+        <input type="date" id="startDate" name="startDate">
+    </div>
 
-    <label for="endDate">End Date:</label>
-    <input type="date" id="endDate" name="endDate">
+    <div class="form-group">
+        <label for="endDate">End Date:</label>
+        <input type="date" id="endDate" name="endDate">
+    </div>
 
     <button type="submit">Search</button>
 </form>
+
 
 
 <h1>Rooms</h1>

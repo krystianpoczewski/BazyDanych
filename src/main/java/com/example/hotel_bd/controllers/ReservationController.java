@@ -219,7 +219,15 @@ public class ReservationController {
         List<Reservation> reservations = reservationRepository.findAll();
         return ResponseEntity.ok(reservations);
     }
-
+    @GetMapping("/admin/reservations/{id}")
+    public ResponseEntity<Reservation> getReservationById(@PathVariable Integer id) {
+        Optional<Reservation> reservation = reservationRepository.findById(id);
+        if(reservation.isEmpty()) {
+            return ResponseEntity.badRequest().body(null);
+        }
+        Reservation foundReservation = reservation.get();
+        return ResponseEntity.ok(foundReservation);
+    }
     /**
      * Checks if the reservation dates are within a valid range.
      *
