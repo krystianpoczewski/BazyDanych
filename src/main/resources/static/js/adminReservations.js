@@ -43,12 +43,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             const rooms = await fetchData('/user/room');
             const amenities = await fetchData('/user/reservation-amenities');
 
-            const roomOptions = rooms.map(room => `
-                <label>
-                    <input type="checkbox" value="${room.id}" ${reservation.rooms.some(r => r.id === room.id) ? 'checked' : ''}>
-                    Room ID: ${room.id} - ${room.type.name}
-                </label><br>
-            `).join('');
             const amenityOptions = amenities.map(amenity => `
                 <label>
                     <input type="checkbox" value="${amenity.id}" ${reservation.amenities.some(a => a.id === amenity.id) ? 'checked' : ''}>
@@ -56,7 +50,13 @@ document.addEventListener('DOMContentLoaded', async () => {
                 </label><br>
             `).join('');
 
-            editFormContainer.innerHTML = `
+            const roomOptions = rooms.map(room => `
+                <option value="${room.id}" ${reservation.rooms.some(r => r.id === room.id) ? 'selected' : ''}>
+                    Room ID: ${room.id} - ${room.type.name}
+                </option>
+            `).join('');
+
+            const editFormHTML = `
                 <div class="edit-form">
                     <h2>Edit Reservation</h2>
                     <form id="editReservationForm">
@@ -71,7 +71,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                         </div>
             
                         <label for="editRooms">Rooms:</label>
-                        <div id="editRooms">${roomOptions}</div>
+                        <select id="editRooms" name="editRooms" multiple required>
+                            ${roomOptions}
+                        </select>
             
                         <label for="editAmenities">Amenities:</label>
                         <div id="editAmenities">${amenityOptions}</div>
@@ -82,25 +84,80 @@ document.addEventListener('DOMContentLoaded', async () => {
                 </div>
             `;
 
+            editFormContainer.innerHTML = editFormHTML;
             editFormContainer.style.display = 'block';
+
+            const editCheckIn = document.getElementById('editCheckIn');
+            const editCheckOut = document.getElementById('editCheckOut');
+
+            const validateDates = () => {
+                const checkInDate = new Date(editCheckIn.value);
+                const checkOutDate = new Date(editCheckOut.value);
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+
+                if (checkInDate && checkOutDate) {
+                    if (checkInDate <= today) {
+                        alert('Check-in date must be after today.');
+                        editCheckIn.setCustomValidity('Check-in date must be after today.');
+                    } else if (checkOutDate <= today) {
+                        alert('Check-out date must be after today.');
+                        editCheckOut.setCustomValidity('Check-out date must be after today.');
+                    } else {
+                        const diffInTime = checkOutDate - checkInDate;
+                        const diffInDays = diffInTime / (1000 * 3600 * 24);
+
+                        if (diffInDays < 1) {
+                            alert('Check-out date must be at least 1 day after check-in date.');
+                            editCheckOut.setCustomValidity('Check-out date must be at least 1 day after check-in date.');
+                        } else if (diffInDays > 30) {
+                            alert('Check-out date cannot be more than 30 days after check-in date.');
+                            editCheckOut.setCustomValidity('Check-out date cannot be more than 30 days after check-in date.');
+                        } else {
+                            editCheckIn.setCustomValidity('');
+                            editCheckOut.setCustomValidity('');
+                        }
+                    }
+                }
+            };
+
+            const validateRooms = () => {
+                const rooms = document.querySelectorAll('#editRooms option:checked');
+                if (rooms.length === 0) {
+                    alert('You must select at least 1 room.');
+                    return false;
+                }
+                if (rooms.length > 10) {
+                    alert('You can select a maximum of 10 rooms.');
+                    return false;
+                }
+                return true;
+            };
 
             document.getElementById('editReservationForm').addEventListener('submit', async (e) => {
                 e.preventDefault();
 
-                const updatedReservation = {
-                    checkInDate: document.getElementById('editCheckIn').value,
-                    checkOutDate: document.getElementById('editCheckOut').value,
-                    rooms: Array.from(document.querySelectorAll('#editRooms input:checked')).map(input => ({ id: input.value })),
-                    amenities: Array.from(document.querySelectorAll('#editAmenities input:checked')).map(input => ({ id: input.value })),
-                };
+                validateDates();
+                const isValidRoom = validateRooms();
+                if (editCheckIn.validity.valid && editCheckOut.validity.valid && isValidRoom) {
+                    const updatedReservation = {
+                        checkInDate: editCheckIn.value,
+                        checkOutDate: editCheckOut.value,
+                        rooms: Array.from(document.querySelectorAll('#editRooms option:checked')).map(option => ({ id: option.value })),
+                        amenities: Array.from(document.querySelectorAll('#editAmenities input:checked')).map(input => ({ id: input.value })),
+                    };
 
-                updateReservation(reservationId, updatedReservation);
-                editFormContainer.style.display = 'none';
+                    updateReservation(reservationId, updatedReservation);
+                    editFormContainer.style.display = 'none';
+                } else {
+                    alert('Please fix the errors before submitting.');
+                }
             });
 
             document.getElementById('cancelEdit').addEventListener('click', () => {
                 editFormContainer.style.display = 'none';
             });
+
         } catch (error) {
             console.error('Failed to fetch data for the edit form:', error);
             alert('Failed to load reservation data. Please try again.');

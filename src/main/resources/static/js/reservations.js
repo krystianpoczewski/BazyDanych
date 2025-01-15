@@ -5,6 +5,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     const reservationForm = document.getElementById('reservationForm');
     const roomSelect = document.getElementById('roomIds');
     const amenitiesSelect = document.getElementById('amenities');
+    const checkInDateInput = document.getElementById('checkInDate');
+    const checkOutDateInput = document.getElementById('checkOutDate');
 
     const fetchReservations = async () => {
         try {
@@ -21,7 +23,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     <ul>
                         ${reservation.amenities.map(amenity => `<li>${amenity.name} - $${amenity.pricePerNight}</li>`).join('')}
                     </ul>
-                    <p><strong>Total price:</strong>${reservation.calculatedPrice}$</p>
+                    <p><strong>Total price:</strong> $${reservation.calculatedPrice}</p>
                 </div>
             `).join('');
         } catch (error) {
@@ -51,20 +53,68 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     };
 
+    const validateDates = () => {
+        const checkInDate = new Date(checkInDateInput.value);
+        const checkOutDate = new Date(checkOutDateInput.value);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        if (checkInDate && checkOutDate) {
+            if (checkInDate <= today) {
+                alert('Check-in date must be after today.');
+                checkInDateInput.setCustomValidity('Check-in date must be after today.');
+            } else if (checkOutDate <= today) {
+                alert('Check-out date must be after today.');
+                checkOutDateInput.setCustomValidity('Check-out date must be after today.');
+            } else {
+                const diffInTime = checkOutDate - checkInDate;
+                const diffInDays = diffInTime / (1000 * 3600 * 24);
+
+                if (diffInDays < 1) {
+                    alert('Check-out date must be at least 1 day after check-in date.');
+                    checkOutDateInput.setCustomValidity('Check-out date must be at least 1 day after check-in date.');
+                } else if (diffInDays > 30) {
+                    alert('Check-out date cannot be more than 30 days after check-in date.');
+                    checkOutDateInput.setCustomValidity('Check-out date cannot be more than 30 days after check-in date.');
+                } else {
+                    checkOutDateInput.setCustomValidity('');
+                }
+            }
+        }
+    };
+
+
+    const validateRooms = () => {
+        const selectedRooms = roomSelect.selectedOptions.length;
+
+        if (selectedRooms > 10) {
+            alert('You can select a maximum of 10 rooms.');
+            roomSelect.setCustomValidity('You can select a maximum of 10 rooms.');
+        } else {
+            roomSelect.setCustomValidity('');
+        }
+    };
+
     reservationForm?.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const checkInDate = document.getElementById('checkInDate').value;
-        const checkOutDate = document.getElementById('checkOutDate').value;
-        const rooms = Array.from(roomSelect.selectedOptions).map(option => ({ "id": parseInt(option.value, 10) }));
-        const amenities = Array.from(amenitiesSelect.selectedOptions).map(option => ({ "id": parseInt(option.value, 10) }));
 
-        try {
-            await fetchData('/user/reservations', 'POST', { checkInDate, checkOutDate, rooms, amenities });
-            alert('Reservation created successfully!');
-            fetchReservations();
-        } catch (error) {
-            console.error('Failed to create reservation:', error);
-            alert('Failed to create reservation. Please try again.');
+        validateDates();
+        validateRooms();
+
+        if (checkInDateInput.validity.valid && checkOutDateInput.validity.valid && roomSelect.validity.valid) {
+            const checkInDate = checkInDateInput.value;
+            const checkOutDate = checkOutDateInput.value;
+            const rooms = Array.from(roomSelect.selectedOptions).map(option => ({ "id": parseInt(option.value, 10) }));
+            const amenities = Array.from(amenitiesSelect.selectedOptions).map(option => ({ "id": parseInt(option.value, 10) }));
+
+            try {
+                await fetchData('/user/reservations', 'POST', { checkInDate, checkOutDate, rooms, amenities });
+                alert('Reservation created successfully!');
+                fetchReservations();
+            } catch (error) {
+                console.error('Failed to create reservation:', error);
+                alert('Failed to create reservation. Please try again.');
+            }
         }
     });
 

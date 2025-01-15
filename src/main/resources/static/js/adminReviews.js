@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     <input type="number" id="editRating" name="rating" min="1" max="5" value="${currentRating}" required>
                     <br>
                     <label for="editContent">Review:</label>
-                    <textarea id="editContent" name="content" required>${currentContent}</textarea>
+                    <textarea id="editContent" name="content" required minlength="1" maxlength="255">${currentContent}</textarea>
                     <br>
                     <button type="submit">Save Changes</button>
                     <button type="button" id="cancelEdit">Cancel</button>

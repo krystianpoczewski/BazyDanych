@@ -36,23 +36,20 @@ textarea {
     border-radius: 4px;
 }
 
-/* General form styling */
 #roomSearchForm {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
 }
 
-/* Ensure each label-input pair stays on the same line */
 .form-group {
     display: flex;
     align-items: center;
     gap: 10px;
 }
 
-/* Optional: make form elements look more uniform */
 label {
-    width: 100px; /* Adjust as needed for consistent label width */
+    width: 100px;
     text-align: right;
 }
 input, select {
@@ -82,25 +79,24 @@ h1, h2 {
     margin-bottom: 10px;
     background: #fff;
 }
-/* General form styling */
 .form-group {
     display: flex;
     align-items: center;
-    gap: 10px; /* Adds spacing between label and input */
-    margin-bottom: 1rem; /* Ensures consistent spacing between form fields */
+    gap: 10px;
+    margin-bottom: 1rem;
 }
 
 label {
-    width: 150px; /* Fixed width for consistent alignment */
-    text-align: right; /* Aligns label text to the right */
-    font-weight: bold; /* Makes labels stand out */
+    width: 150px;
+    text-align: right;
+    font-weight: bold;
 }
 
 input, select {
-    flex-grow: 1; /* Ensures input elements take up remaining space */
-    padding: 8px; /* Adds padding inside input elements */
-    border: 1px solid #ccc; /* Consistent border style */
-    border-radius: 4px; /* Rounded corners for inputs */
+    flex-grow: 1;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
 }
 
 button {
@@ -114,60 +110,36 @@ button {
 }
 
 button:hover {
-    background-color: #0056b3; /* Darker shade on hover */
+    background-color: #0056b3;
 }
 
-/* Basic Styling for the Navigation Bar */
 nav {
-    background-color: #333; /* Dark background color */
-    padding: 10px 20px; /* Padding for spacing */
-    text-align: center; /* Center the links */
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Optional: Adding a shadow */
+    background-color: #3a3a3a;
+    padding: 10px 20px;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 nav a {
-    color: white; /* Text color */
-    text-decoration: none; /* Remove underline */
-    margin: 0 15px; /* Horizontal space between links */
-    padding: 10px 15px; /* Vertical and horizontal padding for each link */
-    font-size: 16px; /* Font size */
-    border-radius: 4px; /* Rounded corners */
-    display: inline-block; /* Ensure the links are inline but with padding */
+    color: white;
+    text-decoration: none;
+    margin: 0 15px;
+    padding: 10px 15px;
+    font-size: 16px;
+    border-radius: 4px;
+    display: inline-block;
 }
 
-/* Hover effect for links */
 nav a:hover {
-    background-color: #007bff; /* Blue background on hover */
-    color: white; /* Keep the text white on hover */
-    transition: background-color 0.3s ease-in-out; /* Smooth transition */
+    background-color: #007bff;
+    color: white;
+    transition: background-color 0.3s ease-in-out;
 }
 
-/* Active link styling (optional) */
 nav a.active {
-    background-color: #0056b3; /* Darker blue for active link */
+    background-color: #0056b3;
 }
 
-/* Admin Panel link styling */
-#admin-panel-link {
-    background-color: #ff9900; /* Orange color for Admin Panel */
-    font-weight: bold; /* Make it stand out */
-}
-
-/* Ensure the nav is responsive for smaller screens */
-@media (max-width: 768px) {
-    nav {
-        padding: 10px 15px; /* Adjust padding for small screens */
-    }
-
-    nav a {
-        margin: 10px 0; /* Add space between the links vertically */
-        display: block; /* Stack the links vertically */
-        width: 100%; /* Make links take the full width */
-        text-align: left; /* Align text to the left */
-    }
-}
-
-/* Admin Panel Specific Styling */
 .admin-panel-container a {
     display: block;
     text-decoration: none;
@@ -185,17 +157,10 @@ nav a.active {
     background-color: #0056b3;
 }
 
-/* Bold text styling */
-.admin-panel-container a strong {
-    font-weight: bold;
-}
-
-/* Make it more prominent when the link is active */
 .admin-panel-container a:active {
     background-color: #004085;
 }
 
-/* Adding some padding around the content for better spacing */
 .admin-panel-container {
     max-width: 500px;
     margin: 0 auto;
