@@ -20,7 +20,7 @@ document.getElementById('loginForm')?.addEventListener('submit', async (e) => {
         }
 
         const responseData = await response.json();
-        const token = responseData.token; // Use the token from the response body
+        const token = responseData.token;
         if (!token) {
             throw new Error('Token not received');
         }

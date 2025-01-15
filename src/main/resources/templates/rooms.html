@@ -14,6 +14,8 @@
     <a href="/reviews">Reviews</a>
     <a href="/login">Login</a>
     <a href="/register">Register</a>
+    <a href="/change-password">Change password</a>
+    <a href="/admin" id="admin-panel-link" style="display: none;">Admin Panel</a>
 </nav>
 <form id="roomSearchForm">
     <div class="form-group">
@@ -25,12 +27,12 @@
 
     <div class="form-group">
         <label for="capacity">Capacity:</label>
-        <input type="number" id="capacity" name="capacity" placeholder="Minimum Capacity">
+        <input type="number" id="capacity" name="capacity"  min="0" placeholder="Minimum Capacity">
     </div>
 
     <div class="form-group">
         <label for="maxPrice">Max Price:</label>
-        <input type="number" id="maxPrice" name="maxPrice" step="0.01" placeholder="Max Price">
+        <input type="number" id="maxPrice" name="maxPrice" step="0.01" min="0" placeholder="Max Price Per Night">
     </div>
 
     <div class="form-group">
@@ -51,5 +53,7 @@
 <h1>Rooms</h1>
 <div id="roomList"></div>
 <script type="module" src="../static/js/room.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
+<script type="module" src="../static/js/token.js"></script>
 </body>
 </html>

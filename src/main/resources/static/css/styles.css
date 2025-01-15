@@ -116,3 +116,91 @@ button {
 button:hover {
     background-color: #0056b3; /* Darker shade on hover */
 }
+
+/* Basic Styling for the Navigation Bar */
+nav {
+    background-color: #333; /* Dark background color */
+    padding: 10px 20px; /* Padding for spacing */
+    text-align: center; /* Center the links */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Optional: Adding a shadow */
+}
+
+nav a {
+    color: white; /* Text color */
+    text-decoration: none; /* Remove underline */
+    margin: 0 15px; /* Horizontal space between links */
+    padding: 10px 15px; /* Vertical and horizontal padding for each link */
+    font-size: 16px; /* Font size */
+    border-radius: 4px; /* Rounded corners */
+    display: inline-block; /* Ensure the links are inline but with padding */
+}
+
+/* Hover effect for links */
+nav a:hover {
+    background-color: #007bff; /* Blue background on hover */
+    color: white; /* Keep the text white on hover */
+    transition: background-color 0.3s ease-in-out; /* Smooth transition */
+}
+
+/* Active link styling (optional) */
+nav a.active {
+    background-color: #0056b3; /* Darker blue for active link */
+}
+
+/* Admin Panel link styling */
+#admin-panel-link {
+    background-color: #ff9900; /* Orange color for Admin Panel */
+    font-weight: bold; /* Make it stand out */
+}
+
+/* Ensure the nav is responsive for smaller screens */
+@media (max-width: 768px) {
+    nav {
+        padding: 10px 15px; /* Adjust padding for small screens */
+    }
+
+    nav a {
+        margin: 10px 0; /* Add space between the links vertically */
+        display: block; /* Stack the links vertically */
+        width: 100%; /* Make links take the full width */
+        text-align: left; /* Align text to the left */
+    }
+}
+
+/* Admin Panel Specific Styling */
+.admin-panel-container a {
+    display: block;
+    text-decoration: none;
+    background-color: #007BFF;
+    color: white;
+    padding: 15px 20px;
+    margin: 10px 0;
+    border-radius: 5px;
+    font-size: 1.2rem;
+    text-align: center;
+    transition: background-color 0.3s ease;
+}
+
+.admin-panel-container a:hover {
+    background-color: #0056b3;
+}
+
+/* Bold text styling */
+.admin-panel-container a strong {
+    font-weight: bold;
+}
+
+/* Make it more prominent when the link is active */
+.admin-panel-container a:active {
+    background-color: #004085;
+}
+
+/* Adding some padding around the content for better spacing */
+.admin-panel-container {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}

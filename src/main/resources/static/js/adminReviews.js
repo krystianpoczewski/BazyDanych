@@ -2,15 +2,14 @@ import { fetchData } from './api.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
     const reviewList = document.getElementById('reviewList');
-    const editFormContainer = document.createElement('div'); // Container for the edit form
+    const editFormContainer = document.createElement('div');
     editFormContainer.id = 'editFormContainer';
-    editFormContainer.style.display = 'none'; // Initially hidden
+    editFormContainer.style.display = 'none';
     document.body.appendChild(editFormContainer);
 
-    // Fetch all reviews
     const fetchAllReviews = async () => {
         try {
-            const reviews = await fetchData('/user/review'); // Assuming this endpoint returns all reviews
+            const reviews = await fetchData('/user/review');
             renderReviews(reviews);
         } catch (error) {
             console.error('Failed to fetch reviews:', error);
@@ -18,7 +17,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     };
 
-    // Render reviews with edit and delete options
     const renderReviews = (reviews) => {
         reviewList.innerHTML = reviews.map(review => `
             <div class="review" data-id="${review.id}">
@@ -31,19 +29,17 @@ document.addEventListener('DOMContentLoaded', async () => {
         attachEventListeners();
     };
 
-    // Delete review
     const deleteReview = async (id) => {
         try {
             await fetchData(`/admin/review/${id}`, 'DELETE');
             alert('Review deleted successfully!');
-            fetchAllReviews(); // Refresh the reviews
+            fetchAllReviews();
         } catch (error) {
             console.error('Failed to delete review:', error);
             alert('Failed to delete review. Please try again.');
         }
     };
 
-    // Open the edit form
     const openEditForm = (id, currentRating, currentContent) => {
         editFormContainer.innerHTML = `
             <div class="edit-form">
@@ -62,7 +58,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         `;
         editFormContainer.style.display = 'block';
 
-        // Handle form submission
         document.getElementById('editReviewForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const updatedRating = document.getElementById('editRating').value;
@@ -71,21 +66,19 @@ document.addEventListener('DOMContentLoaded', async () => {
             try {
                 await fetchData(`/admin/review/${id}`, 'PUT', { rating: updatedRating, content: updatedContent });
                 alert('Review updated successfully!');
-                editFormContainer.style.display = 'none'; // Hide the form
-                fetchAllReviews(); // Refresh the reviews
+                editFormContainer.style.display = 'none';
+                fetchAllReviews();
             } catch (error) {
                 console.error('Failed to update review:', error);
                 alert('Failed to update review. Please try again.');
             }
         });
 
-        // Handle cancel action
         document.getElementById('cancelEdit').addEventListener('click', () => {
-            editFormContainer.style.display = 'none'; // Hide the form
+            editFormContainer.style.display = 'none';
         });
     };
 
-    // Attach event listeners for edit and delete buttons
     const attachEventListeners = () => {
         const deleteButtons = document.querySelectorAll('.delete-btn');
         const editButtons = document.querySelectorAll('.edit-btn');
@@ -111,6 +104,5 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     };
 
-    // Load all reviews when the page loads
     fetchAllReviews();
 });

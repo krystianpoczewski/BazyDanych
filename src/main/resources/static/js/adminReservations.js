@@ -5,7 +5,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     const editFormContainer = document.getElementById('editFormContainer');
     editFormContainer.style.display = 'none';
 
-    // Fetch and render all reservations
     const fetchAllReservations = async () => {
         try {
             const reservations = await fetchData('/admin/reservations/all');
@@ -16,7 +15,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     };
 
-    // Render all reservations
     const renderReservations = (reservations) => {
         reservationList.innerHTML = reservations.map(reservation => `
             <div class="reservation" data-id="${reservation.id}">
@@ -39,7 +37,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         attachEventListeners();
     };
 
-    // Open the edit form for a reservation
     const openEditForm = async (reservationId) => {
         try {
             const reservation = await fetchData(`/admin/reservations/${reservationId}`);
@@ -90,7 +87,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             document.getElementById('editReservationForm').addEventListener('submit', async (e) => {
                 e.preventDefault();
 
-                // Prepare the updated reservation object with correct format for PUT request
                 const updatedReservation = {
                     checkInDate: document.getElementById('editCheckIn').value,
                     checkOutDate: document.getElementById('editCheckOut').value,
@@ -111,7 +107,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     };
 
-    // Update an existing reservation
     const updateReservation = async (reservationId, updatedReservation) => {
         try {
             await fetchData(`/admin/reservations/${reservationId}`, 'PUT', updatedReservation);
@@ -123,7 +118,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     };
 
-    // Delete a reservation
     const deleteReservation = async (reservationId) => {
         try {
             await fetchData(`/admin/reservations/${reservationId}`, 'DELETE');
@@ -135,7 +129,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     };
 
-    // Attach event listeners to edit and delete buttons
     const attachEventListeners = () => {
         const deleteButtons = document.querySelectorAll('.delete-btn');
         const editButtons = document.querySelectorAll('.edit-btn');
@@ -157,6 +150,5 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     };
 
-    // Fetch all reservations initially and render the form
     fetchAllReservations();
 });

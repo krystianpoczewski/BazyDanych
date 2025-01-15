@@ -5,7 +5,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     const roomSearchForm = document.getElementById('roomSearchForm');
     const roomTypeSelect = document.getElementById('roomType');
 
-    // Fetch room types and populate the dropdown
     try {
         const roomTypes = await fetchData('/user/room-type');
         roomTypeSelect.innerHTML += roomTypes.map(roomType => `
@@ -48,17 +47,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     roomSearchForm.addEventListener('submit', async (event) => {
         event.preventDefault();
 
-        // Capture form data and convert it to query parameters
         const formData = new FormData(roomSearchForm);
         const queryParams = Array.from(formData.entries())
-            .filter(([key, value]) => value) // Filter out empty values
+            .filter(([key, value]) => value)
             .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
             .join('&');
 
-        // Fetch and render rooms based on the filters
         await fetchAndRenderRooms(queryParams ? `?${queryParams}` : '');
     });
 
-    // Initial fetch to display all rooms
     fetchAndRenderRooms();
 });

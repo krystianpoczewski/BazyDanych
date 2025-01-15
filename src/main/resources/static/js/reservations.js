@@ -6,7 +6,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     const roomSelect = document.getElementById('roomIds');
     const amenitiesSelect = document.getElementById('amenities');
 
-    // Fetch and display reservations
     const fetchReservations = async () => {
         try {
             const reservations = await fetchData('/user/reservations');
@@ -22,7 +21,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     <ul>
                         ${reservation.amenities.map(amenity => `<li>${amenity.name} - $${amenity.pricePerNight}</li>`).join('')}
                     </ul>
-                    <p><strong>Total price:</strong>${reservation.calculatedPrice}</p>
+                    <p><strong>Total price:</strong>${reservation.calculatedPrice}$</p>
                 </div>
             `).join('');
         } catch (error) {
@@ -30,7 +29,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     };
 
-    // Fetch available rooms
     const fetchRooms = async () => {
         try {
             const rooms = await fetchData('/user/room');
@@ -42,7 +40,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     };
 
-    // Fetch available amenities
     const fetchAmenities = async () => {
         try {
             const amenities = await fetchData('/user/reservation-amenities');
@@ -54,7 +51,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     };
 
-    // Add new reservation
     reservationForm?.addEventListener('submit', async (e) => {
         e.preventDefault();
         const checkInDate = document.getElementById('checkInDate').value;
@@ -65,15 +61,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         try {
             await fetchData('/user/reservations', 'POST', { checkInDate, checkOutDate, rooms, amenities });
             alert('Reservation created successfully!');
-            fetchReservations(); // Refresh reservation list
+            fetchReservations();
         } catch (error) {
             console.error('Failed to create reservation:', error);
             alert('Failed to create reservation. Please try again.');
         }
     });
 
-
-    // Load rooms, amenities, and reservations on page load
     await fetchRooms();
     await fetchAmenities();
     fetchReservations();

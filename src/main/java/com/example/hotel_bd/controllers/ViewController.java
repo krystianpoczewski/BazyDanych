@@ -42,6 +42,12 @@ public class ViewController {
         return "reviews";
     }
 
+    @GetMapping("/change-password")
+    public String ChangePasswordPage(Model model){
+        model.addAttribute("title", "Hotel Bd");
+        return "changePassword";
+    }
+
     @GetMapping("/admin")
     public String AdminPage(Model model){
         model.addAttribute("title", "Hotel Bd");
@@ -78,5 +84,10 @@ public class ViewController {
     public String AdminReservationPage(Model model){
         model.addAttribute("title", "Hotel Bd");
         return "adminReservations";
+    }
+    @GetMapping("/admin/users")
+    public String AdminUserPage(Model model){
+        model.addAttribute("title", "Hotel Bd");
+        return "adminUser";
     }
 }

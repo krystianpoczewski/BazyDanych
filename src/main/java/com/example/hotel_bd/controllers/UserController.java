@@ -7,6 +7,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,13 +28,16 @@ public class UserController {
     private UserRepository userRepository;
     @Autowired
     private ReviewRepository reviewRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     /**
      * Retrieves a list of all users from the database.
      *
      * @return a ResponseEntity containing a list of User objects,
      *         wrapped with an HTTP status 200 (OK) response.
      */
-    @GetMapping("/")
+    @GetMapping()
     public ResponseEntity<List<User>> findAllUsers() {
         List<User> users = userRepository.findAll();
         return ResponseEntity.ok(users);
@@ -51,7 +55,12 @@ public class UserController {
         return user.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
-
+    @GetMapping("/id/{id}")
+    public ResponseEntity<User> findById(@PathVariable Integer id) {
+        Optional<User> user = userRepository.findById(id);
+        return user.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
     /**
      * Updates the details of an existing user.
      *
@@ -67,6 +76,8 @@ public class UserController {
             existingUser.setFirstName(updatedUser.getFirstName());
             existingUser.setLastName(updatedUser.getLastName());
             existingUser.setEmail(updatedUser.getEmail());
+            existingUser.setRole(updatedUser.getRole());
+            existingUser.setHashedPassword(passwordEncoder.encode(updatedUser.getHashedPassword()));
             User savedUser = userRepository.save(existingUser);
             return ResponseEntity.ok(savedUser);
         }

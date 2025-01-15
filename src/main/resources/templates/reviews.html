@@ -14,6 +14,8 @@
     <a href="/reviews">Reviews</a>
     <a href="/login">Login</a>
     <a href="/register">Register</a>
+    <a href="/change-password">Change password</a>
+    <a href="/admin" id="admin-panel-link" style="display: none;">Admin Panel</a>
 </nav>
 <h1>Reviews</h1>
 <div id="reviewList"></div>
@@ -32,5 +34,7 @@
     <button type="submit">Submit Review</button>
 </form>
 <script type="module" src="../static/js/review.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
+<script type="module" src="../static/js/token.js"></script>
 </body>
 </html>

@@ -6,10 +6,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     const prevBtn = document.getElementById('prevBtn');
     const nextBtn = document.getElementById('nextBtn');
 
-    let currentPage = 0;  // Start on the first page
-    const reviewsPerPage = 5;  // Show 5 reviews per page
+    let currentPage = 0;
+    const reviewsPerPage = 5;
 
-    // Fetch reviews from the server with pagination
     const fetchReviews = async () => {
         try {
             const reviews = await fetchData(`/user/reviewPage?page=${currentPage}&limit=${reviewsPerPage}`);
@@ -21,15 +20,13 @@ document.addEventListener('DOMContentLoaded', async () => {
                 </div>
             `).join('');
 
-            // Enable or disable pagination buttons
             prevBtn.disabled = currentPage === 0;
-            nextBtn.disabled = reviews.length < reviewsPerPage; // Disable next button if fewer than 5 reviews are returned
+            nextBtn.disabled = reviews.length < reviewsPerPage;
         } catch (error) {
             console.error('Failed to fetch reviews:', error);
         }
     };
 
-    // Add new review
     reviewForm?.addEventListener('submit', async (e) => {
         e.preventDefault();
         const rating = document.getElementById('rating').value;
@@ -38,17 +35,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         try {
             await fetchData('/user/review', 'POST', { rating, content });
             alert('Review submitted successfully!');
-            fetchReviews(); // Refresh the review list
+            fetchReviews();
         } catch (error) {
             console.error('Failed to submit review:', error);
             alert('Failed to submit review. Please try again.');
         }
     });
 
-    // Load the reviews when the page is first loaded
     fetchReviews();
 
-    // Previous button functionality
     prevBtn?.addEventListener('click', () => {
         if (currentPage > 0) {
             currentPage--;
@@ -56,7 +51,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
 
-    // Next button functionality
     nextBtn?.addEventListener('click', () => {
         currentPage++;
         fetchReviews();

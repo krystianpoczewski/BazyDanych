@@ -81,7 +81,7 @@ public class AuthController {
         return ResponseEntity.ok("User registered successfully");
     }
 
-    @PostMapping("/user/change-password")
+    @PostMapping("/api/user/change-password")
     public ResponseEntity<String> changePassword(@RequestBody ChangePasswordRequest request, Authentication authentication) {
         String email = authentication.getName();
         User user = userRepository.findByEmail(email)

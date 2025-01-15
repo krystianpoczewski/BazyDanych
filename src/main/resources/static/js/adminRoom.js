@@ -12,7 +12,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.body.insertBefore(newRoomFormContainer, roomList);
     document.body.appendChild(editFormContainer);
 
-    // Fetch and render all rooms
     const fetchAllRooms = async () => {
         try {
             const rooms = await fetchData('/user/room');
@@ -23,7 +22,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     };
 
-    // Render all rooms
     const renderRooms = (rooms) => {
         roomList.innerHTML = rooms.map(room => `
             <div class="room" data-id="${room.id}">
@@ -42,7 +40,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         attachEventListeners();
     };
 
-    // Add a new room
     const addRoom = async (newRoom) => {
         try {
             await fetchData('/admin/room', 'POST', {
@@ -59,7 +56,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     };
 
-    // Update an existing room
     const updateRoom = async (roomId, updatedRoom) => {
         try {
             await fetchData(`/admin/room/${roomId}`, 'PUT', {
@@ -76,7 +72,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     };
 
-    // Open the edit form
     const openEditForm = async (roomId) => {
         try {
             const room = await fetchData(`/user/room/${roomId}`);
@@ -138,7 +133,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     };
 
-    // Render the add room form
     const renderAddRoomForm = async () => {
         try {
             const roomTypes = await fetchData('/user/room-type');
@@ -202,7 +196,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             alert('Failed to load data for add room form. Please try again.');
         }
     };
-    // Delete a room
+
     const deleteRoom = async (id) => {
         try {
             await fetchData(`/admin/room/${id}`, 'DELETE');
