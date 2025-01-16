@@ -47,7 +47,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         deleteButtons.forEach(button => {
             button.addEventListener('click', async () => {
-                const userId = button.closest('.user-card').dataset.id;
+                const userId = parseInt(button.closest('.user-card').dataset.id, 10);
+                if (isNaN(userId)) {
+                    console.error('Invalid userId:', button.closest('.user-card').dataset.id);
+                    return;
+                }
                 if (confirm('Are you sure you want to delete this user?')) {
                     await deleteUser(userId);
                 }
@@ -64,7 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const deleteUser = async (userId) => {
         try {
-            await fetchData(`/admin/users/id/${userId}`, 'DELETE');
+            await fetchData(`/admin/users/${userId}`, 'DELETE');
             alert('User deleted successfully!');
             fetchAllUsers();
         } catch (error) {

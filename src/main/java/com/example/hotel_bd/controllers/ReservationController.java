@@ -115,7 +115,7 @@ public class ReservationController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
         if (userRepository.findByEmail(email).isPresent()) {
-            List<Reservation> reservations = reservationRepository.findByUser(email);
+            List<Reservation> reservations = reservationRepository.findByUserEmail(email);
             return ResponseEntity.ok(reservations);
         }
             return ResponseEntity.badRequest().body(null);

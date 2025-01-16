@@ -17,6 +17,6 @@ public interface ReviewRepository extends JpaRepository<Review, Integer> {
     List<Review> findAll();
     Page<Review> findAll(Pageable pageable);
     Optional<Review> findById(int id);
-    @Query("SELECT r FROM Review r WHERE r.user = :userId")
+    @Query("SELECT r FROM Review r WHERE r.user.id = :userId")
     List<Review> findByUserId(Integer userId);
 }

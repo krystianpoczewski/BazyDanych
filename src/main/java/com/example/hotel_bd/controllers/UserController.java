@@ -1,9 +1,14 @@
 package com.example.hotel_bd.controllers;
 
+import com.example.hotel_bd.models.Reservation;
+import com.example.hotel_bd.models.Review;
 import com.example.hotel_bd.models.User;
+import com.example.hotel_bd.repository.ReservationRepository;
 import com.example.hotel_bd.repository.ReviewRepository;
 import com.example.hotel_bd.repository.UserRepository;
 import jakarta.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -24,12 +29,15 @@ import java.util.Optional;
 @RequestMapping("/api/admin/users")
 public class UserController {
 
+    private static final Logger log = LoggerFactory.getLogger(UserController.class);
     @Autowired
     private UserRepository userRepository;
     @Autowired
     private ReviewRepository reviewRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private ReservationRepository reservationRepository;
 
     /**
      * Retrieves a list of all users from the database.
@@ -95,9 +103,15 @@ public class UserController {
     @DeleteMapping("/{id}")
     @Transactional
     public ResponseEntity<String> deleteUser(@PathVariable Integer id) {
-        if (userRepository.existsById(id)) {
-            userRepository.deleteById(id);
-            reviewRepository.findByUserId(id).forEach(review -> reviewRepository.delete(review));
+        Optional<User> userOpt = userRepository.findById(id);
+        log.info(userOpt.toString());
+        if(userOpt.isPresent()) {
+            User user = userOpt.get();
+            List<Review> reviews = reviewRepository.findByUserId(user.getId());
+            List<Reservation> reservations = reservationRepository.findByUserEmail(user.getEmail());
+            reservationRepository.deleteAll(reservations);
+            reviewRepository.deleteAll(reviews);
+            userRepository.delete(user);
             return ResponseEntity.ok("User deleted successfully");
         }
         return ResponseEntity.notFound().build();

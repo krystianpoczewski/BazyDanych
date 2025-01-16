@@ -20,7 +20,7 @@ import java.util.Optional;
 public interface ReservationRepository extends JpaRepository<Reservation, Integer> {
     List<Reservation> findAll();
     @Query("SELECT rr FROM Reservation rr WHERE rr.user.email = :email")
-    List<Reservation> findByUser(String email);
+    List<Reservation> findByUserEmail(String email);
     @Query("SELECT rr FROM Reservation rr JOIN rr.rooms r WHERE r.id = :roomId")
     List<Reservation> findByRoomId(Integer roomId);
     Optional<Reservation> findById(Integer id);
